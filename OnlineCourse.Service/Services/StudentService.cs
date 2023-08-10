@@ -1,38 +1,136 @@
-﻿using OnlineCourse.Service.Dtos.Students;
+﻿using System;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using OnlineCourse.DAL.Repositories;
+using OnlineCourse.Domain.Entities.Students;
+using OnlineCourse.Service.Dtos.Students;
 using OnlineCourse.Service.Helpers;
 using OnlineCourse.Service.Interfaces;
+using OnlineCourse.Service.Mappers;
 
 namespace OnlineCourse.Service.Services;
 
 public class StudentService : IStudentService
 {
+    private readonly Mapper mapper;
+    private readonly UnitOfWork unitOfWork;
+
     public StudentService()
     {
-        
+        this.unitOfWork = new UnitOfWork();
+        this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
+
     }
 
-    public Task<Response<StudentResultDto>> CreateAsync(StudentCreationDto dto)
+    public async Task<Response<StudentResultDto>> CreateAsync(StudentCreationDto dto)
     {
-        throw new NotImplementedException();
+        Student student = mapper.Map<Student>(dto);
+
+        if (student is null)
+            return new Response<StudentResultDto>
+            {
+                StatusCode = 403,
+                Message = $"This Student not fount Id: {student.Id}",
+                Data = null
+            };
+
+        await this.unitOfWork.StudentRepository.CreateAsync(student);
+        await this.unitOfWork.SaveAsync();
+
+        var result = this.mapper.Map<StudentResultDto>(student);
+        return new Response<StudentResultDto>
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = result
+        };
     }
 
-    public Task<Response<bool>> DeleteAsync(long id)
+    public async Task<Response<StudentResultDto>> UpdateAsync(StudentUpdateDto dto)
     {
-        throw new NotImplementedException();
+        Student existStudent = await this.unitOfWork.StudentRepository.SelectById(dto.Id);
+        if (existStudent is null)
+            return new Response<StudentResultDto>
+            {
+                StatusCode = 403,
+                Message = $"This student is not found Id:{existStudent.Id}",
+                Data = null
+            };
+
+        var mappedStudent = this.mapper.Map(dto, existStudent);
+        this.unitOfWork.StudentRepository.Update(mappedStudent);
+        this.unitOfWork.SaveAsync();
+
+        var result = this.mapper.Map<StudentResultDto>(mappedStudent);
+
+        return new Response<StudentResultDto>
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = result
+        };
+
     }
 
-    public Task<Response<List<StudentResultDto>>> GetAllAsync()
+    public async Task<Response<bool>> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        Student existStudent = await this.unitOfWork.StudentRepository.SelectById(id);
+
+        if (existStudent is null)
+            return new Response<bool>
+            {
+                StatusCode = 403,
+                Message = $"This student is not found Id:{existStudent.Id}",
+                Data = false
+            };
+        this.unitOfWork.StudentRepository.Delete(existStudent);
+        this.unitOfWork.SaveAsync();
+
+        return new Response<bool>
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = true
+        };
     }
 
-    public Task<Response<StudentResultDto>> GetByIdAsync(long id)
+    public async Task<Response<StudentResultDto>> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        Student existStudent = await this.unitOfWork.StudentRepository.SelectById(id);
+        if (existStudent is null)
+            return new Response<StudentResultDto>
+            {
+                StatusCode = 403,
+                Message = $"This student is not found Id:{existStudent.Id}",
+                Data = null
+            };
+
+        var result = this.mapper.Map<StudentResultDto>(existStudent);
+
+        return new Response<StudentResultDto>
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = result
+        };
     }
 
-    public Task<Response<StudentResultDto>> UpdateAsync(StudentUpdateDto dto)
+    public async Task<Response<IEnumerable<StudentResultDto>>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var students = await this.unitOfWork.StudentRepository.SelectAll().ToListAsync();
+
+
+        foreach (var item in students)
+        {
+            Student student = await this.unitOfWork.StudentRepository.SelectById(item.Id);
+        }
+
+        var result = this.mapper.Map<IEnumerable<StudentResultDto>>(students);
+        return new Response<IEnumerable<StudentResultDto>>
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = result
+        };
     }
 }

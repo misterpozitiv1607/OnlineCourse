@@ -10,5 +10,5 @@ public interface IStudentService
     Task<Response<StudentResultDto>> UpdateAsync(StudentUpdateDto dto);
     Task<Response<bool>> DeleteAsync(long id);
     Task<Response<StudentResultDto>> GetByIdAsync(long id);
-    Task<Response<List<StudentResultDto>>> GetAllAsync();
+    Task<Response<IEnumerable<StudentResultDto>>> GetAllAsync();
 }
