@@ -1,8 +1,8 @@
 ﻿using OnlineCourse.Domain.Commons;
 
-namespace OnlineCourse.DAL.IRepositories;
+namespace OnlineCourse.DAL.IRepositories.GenericIRepository;
 
-public interface IRepository<T> where T:Auditable
+public interface IRepository<T> where T : Auditable
 {
     Task AddAsync(T entity);
     void Update(T entity);
