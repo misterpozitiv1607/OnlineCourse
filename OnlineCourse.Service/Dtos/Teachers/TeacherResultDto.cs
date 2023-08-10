@@ -14,9 +14,4 @@ public class TeacherResultDto
     public string Speciality { get; set; }
     public string Email { get; set; }
     public int Experince { get; set; }
-
-    public static implicit operator TeacherResultDto(StudentResultDto v)
-    {
-        throw new NotImplementedException();
-    }
 }
