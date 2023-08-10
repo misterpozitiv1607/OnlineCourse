@@ -1,5 +1,6 @@
 ﻿namespace OnlineCourse.Service.Interfaces;
 
-internal interface IStudentService
+public interface IStudentService
 {
+
 }
