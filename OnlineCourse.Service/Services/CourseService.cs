@@ -1,11 +1,24 @@
-﻿using OnlineCourse.Service.Dtos.Courses;
+﻿using AutoMapper;
+using OnlineCourse.DAL.Repositories;
+using OnlineCourse.Service.Dtos.Courses;
 using OnlineCourse.Service.Helpers;
 using OnlineCourse.Service.Interfaces;
+using OnlineCourse.Service.Mappers;
 
 namespace OnlineCourse.Service.Services;
 
 public class CourseService : ICourseService
 {
+    private readonly Mapper mapper;
+    private readonly UnitOfWork unitOfWork;
+
+    public CourseService()
+    {
+        this.unitOfWork = new UnitOfWork();
+        this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
+
+    }
+
     public Task<Response<CourseResultDto>> CreateAsync(CourseCreationDto dto)
     {
         throw new NotImplementedException();

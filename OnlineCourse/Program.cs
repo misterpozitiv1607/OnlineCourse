@@ -11,6 +11,10 @@ StudentCreationDto studentCreationDto = new StudentCreationDto()
     Phone = "+998908765432",
     Email = "madiyorodilov@gmail.com"
 };
-var result = (await studentService.CreateAsync(studentCreationDto));
+//var result = (await studentService.CreateAsync(studentCreationDto));
 
-Console.WriteLine(result.Data.FirstName);
+//Console.WriteLine(result.Data.FirstName);
+
+var res = await studentService.GetAllAsync();
+foreach(var item in res.Data)
+    Console.WriteLine(item.FirstName);
