@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.Repositories;
 using OnlineCourse.Domain.Entities.Orders;
-using OnlineCourse.Domain.Entities.Students;
 using OnlineCourse.Service.Dtos.Orders;
 using OnlineCourse.Service.Helpers;
 using OnlineCourse.Service.Interfaces;
@@ -115,7 +114,7 @@ public class OrderService : IOrderService
     }
 
 
-    public async Task<Response<List<OrderResultDto>>> GetAllAsync()
+    public async Task<Response<IEnumerable<OrderResultDto>>> GetAllAsync()
     {
         var orders = await this.unitOfWork.OrderRepository.SelectAll().ToListAsync();
 
@@ -126,12 +125,13 @@ public class OrderService : IOrderService
         }
 
         var result = this.mapper.Map<IEnumerable<OrderResultDto>>(orders);
-        return new Response<IEnumerable<StudentResultDto>>
+        return new Response<IEnumerable<OrderResultDto>>
         {
             StatusCode = 200,
             Message = "Success",
             Data = result
         };
-    }    
+    }   
+    
 }
 
