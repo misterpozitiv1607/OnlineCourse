@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OnlineCourse.Domain.Commons;
 
-namespace OnlineCourse.DAL.IRepositories
+namespace OnlineCourse.DAL.IRepositories;
+
+public interface IRepository<T> where T:Auditable
 {
-    internal class IRepository
-    {
-    }
+    Task AddAsync(T entity);
+    void Update(T entity);
+    void Delete(T entity);
+    Task<T> SelectByIdAsync(long id);
+    IQueryable<T> SelectAll();
 }
