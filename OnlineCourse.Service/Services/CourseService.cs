@@ -30,7 +30,7 @@ public class CourseService : ICourseService
             return new Response<CourseResultDto>
             {
                 StatusCode = 403,
-                Message = $"This course allready exist PaymentCode:{existCourse.StartDate}"
+                Message = $"This course allready exist CourseStartDate:{existCourse.StartDate}"
             };
 
         await this.unitOfWork.CourseRepository.CreateAsync(course);

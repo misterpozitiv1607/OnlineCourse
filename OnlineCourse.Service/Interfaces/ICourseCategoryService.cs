@@ -10,5 +10,5 @@ public interface ICourseCategoryService
     Task<Response<CourseCategoryResultDto>> UpdateAsync(CourseCategoryUpdateDto dto);
     Task<Response<bool>> DeleteAsync(long id);
     Task<Response<CourseCategoryResultDto>> GetByIdAsync(long id);
-    Task<Response<List<CourseCategoryResultDto>>> GetAllAsync();
+    Task<Response<IEnumerable<CourseCategoryResultDto>>> GetAllAsync();
 }
