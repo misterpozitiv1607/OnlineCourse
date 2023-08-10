@@ -11,4 +11,8 @@
     <Folder Include="Dtos\Orders\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineCourse.Domain\OnlineCourse.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

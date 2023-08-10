@@ -1,7 +1,8 @@
 ﻿namespace OnlineCourse.Service.Dtos.Teachers;
 
-public class TeacherCreationDto
+public class TeacherUpdateDto
 {
+    public long Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTime DateOfBirth { get; set; }
