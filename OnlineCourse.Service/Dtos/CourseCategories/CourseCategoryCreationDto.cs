@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace OnlineCourse.Service.Dtos.CourseCategories;
 
-namespace OnlineCourse.Service.Dtos.CourseCategories
+public class CourseCategoryCreationDto
 {
-    internal class CourseCategoryCreationDto
-    {
-    }
+
+}
+public class CourseCategoryUpdateDto
+{
+
+}
+public class CourseCategoryResultDto
+{
+
 }
