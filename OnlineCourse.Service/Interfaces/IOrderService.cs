@@ -11,5 +11,5 @@ public interface IOrderService
     Task<Response<OrderResultDto>> UpdateAsync(OrderUpdateDto dto);
     Task<Response<bool>> DeleteAsync(long id);
     Task<Response<OrderResultDto>> GetByIdAsync(long id);
-    Task<Response<List<OrderResultDto>>> GetAllAsync();
+    Task<Response<IEnumerable<OrderResultDto>>> GetAllAsync();
 }
