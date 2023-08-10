@@ -31,7 +31,7 @@ public class StudentService : IStudentService
             return new Response<StudentResultDto>
             {
                 StatusCode = 403,
-                Message = $"This student is not found Phone:{existStudent.Phone}"
+                Message = $"This student allready exist Phone:{existStudent.Phone}"
             };
 
         await this.unitOfWork.StudentRepository.CreateAsync(student);

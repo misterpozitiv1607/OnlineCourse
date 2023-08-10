@@ -1,4 +1,5 @@
 ﻿using OnlineCourse.Domain.Enums;
+using OnlineCourse.Service.Dtos.Students;
 
 namespace OnlineCourse.Service.Dtos.Teachers;
 
@@ -13,4 +14,9 @@ public class TeacherResultDto
     public string Speciality { get; set; }
     public string Email { get; set; }
     public int Experince { get; set; }
+
+    public static implicit operator TeacherResultDto(StudentResultDto v)
+    {
+        throw new NotImplementedException();
+    }
 }
