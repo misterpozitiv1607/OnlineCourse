@@ -25,13 +25,13 @@ public class StudentService : IStudentService
     public async Task<Response<StudentResultDto>> CreateAsync(StudentCreationDto dto)
     {
         Student student = mapper.Map<Student>(dto);
+        var existStudent = unitOfWork.StudentRepository.SelectAll().FirstOrDefault(u => u.Phone.Equals(dto.Phone));
 
-        if (student is null)
+        if (existStudent is not null)
             return new Response<StudentResultDto>
             {
                 StatusCode = 403,
-                Message = $"This Student not fount Id: {student.Id}",
-                Data = null
+                Message = $"This student is not found Phone:{existStudent.Phone}"
             };
 
         await this.unitOfWork.StudentRepository.CreateAsync(student);

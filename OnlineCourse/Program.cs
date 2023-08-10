@@ -1,10 +1,16 @@
-﻿namespace OnlineCourse
+﻿using OnlineCourse.Service.Dtos.Students;
+using OnlineCourse.Service.Services;
+
+StudentService studentService = new StudentService();
+
+StudentCreationDto studentCreationDto = new StudentCreationDto()
 {
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-        }
-    }
-}
+    FirstName = "Madiyor",
+    LastName = "Odilov",
+    DateOfBirth = new DateTime(2005, 01, 02),
+    Phone = "+998908765432",
+    Email = "madiyorodilov@gmail.com"
+};
+var result = (await studentService.CreateAsync(studentCreationDto));
+
+Console.WriteLine(result.Data.FirstName);

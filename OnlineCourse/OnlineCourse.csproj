@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineCourse.DAL\OnlineCourse.DAL.csproj" />
+    <ProjectReference Include="..\OnlineCourse.Service\OnlineCourse.Service.csproj" />
   </ItemGroup>
 
 </Project>

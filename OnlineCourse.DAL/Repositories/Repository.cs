@@ -7,9 +7,9 @@ namespace OnlineCourse.DAL.Repositories;
 public class Repository<T> : IRepository<T> where T : Auditable
 {
     private readonly AppDbContext appDbContex;
-    public Repository()
+    public Repository(AppDbContext app)
     {
-        this.appDbContex = new AppDbContext();
+        this.appDbContex = app;
     }
     public async Task CreateAsync(T entity)
     {

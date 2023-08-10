@@ -1,29 +1,31 @@
 ﻿using OnlineCourse.DAL.Contexts;
 using OnlineCourse.DAL.IRepositories;
+using OnlineCourse.Domain.Entities.CourseCategories;
+using OnlineCourse.Domain.Entities.Courses;
+using OnlineCourse.Domain.Entities.Orders;
 using OnlineCourse.Domain.Entities.Students;
-using System;
+using OnlineCourse.Domain.Entities.Teachers;
 
 namespace OnlineCourse.DAL.Repositories;
 
 public class UnitOfWork:IUnitOfWork
 {
     private readonly AppDbContext appDbContex;
-
-    public IRepository<Student> StudentRepository { get; }
-
     public UnitOfWork()
     {
         appDbContex = new AppDbContext();
-        StudentRepository = new Repository<Student>();
-        OrderRepository = new Repository<WorkOut>();
-        NutritionPlanRepository = new Repository<NutritionPlan>();
-        ProgressRecordRepository = new Repository<ProgressRecord>();
+        StudentRepository = new Repository<Student>(appDbContex);
+        OrderRepository = new Repository<Order>(appDbContex);
+        CourseRepository = new Repository<Course>(appDbContex);
+        CourseCategoryRepository = new Repository<CourseCategory>(appDbContex);
+        TeacherRepository = new Repository<Teacher>(appDbContex);
     }
-    public IRepository<WorkOut> OrderRepository { get; }
+    public IRepository<Order> OrderRepository { get; }
+    public IRepository<Student> StudentRepository { get; }
 
-    public IRepository<ProgressRecord> ProgressRecordRepository { get; }
-
-    public IRepository<NutritionPlan> NutritionPlanRepository { get; }
+    public IRepository<Course> CourseRepository { get; }
+    public IRepository<Teacher> TeacherRepository { get; }
+    public IRepository<CourseCategory> CourseCategoryRepository { get; }
 
     public void Dispose()
     {
