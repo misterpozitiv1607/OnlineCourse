@@ -22,7 +22,7 @@ public class MainView
 4.CourseCategories
 5.Orders
 6.I'm a Admin
-0.I'm a Admin");
+0.Exit");
         Console.WriteLine(">>>>>>>>>>>>>>>>>");
 
         int choice = int.Parse(Console.ReadLine());
