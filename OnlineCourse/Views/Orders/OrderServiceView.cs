@@ -1,8 +1,7 @@
 ﻿using OnlineCourse.Domain.Enums;
-using OnlineCourse.Service.Dtos.Orders;
-using OnlineCourse.Service.Dtos.Students;
 using OnlineCourse.Service.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using OnlineCourse.Service.Dtos.Orders;
+
 
 namespace OnlineCourse.Views.Orders;
 

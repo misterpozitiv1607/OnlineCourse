@@ -1,7 +1,5 @@
-﻿using System.ComponentModel;
+﻿using OnlineCourse.Service.Helpers;
 using OnlineCourse.Service.Dtos.Orders;
-using OnlineCourse.Service.Dtos.Students;
-using OnlineCourse.Service.Helpers;
 
 namespace OnlineCourse.Service.Interfaces;
 

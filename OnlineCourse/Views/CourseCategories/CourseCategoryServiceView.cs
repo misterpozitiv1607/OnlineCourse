@@ -1,5 +1,5 @@
-﻿using OnlineCourse.Service.Dtos.CourseCategories;
-using OnlineCourse.Service.Services;
+﻿using OnlineCourse.Service.Services;
+using OnlineCourse.Service.Dtos.CourseCategories;
 
 namespace OnlineCourse.Views.CourseCategories;
 

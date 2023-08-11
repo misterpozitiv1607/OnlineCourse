@@ -1,5 +1,5 @@
-﻿using OnlineCourse.Domain.Commons;
-using OnlineCourse.Domain.Enums;
+﻿using OnlineCourse.Domain.Enums;
+using OnlineCourse.Domain.Commons;
 
 namespace OnlineCourse.Domain.Entities.Teachers;
 public class Teacher:Auditable

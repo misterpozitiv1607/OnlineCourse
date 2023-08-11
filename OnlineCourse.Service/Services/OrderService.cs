@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using OnlineCourse.Service.Helpers;
+using OnlineCourse.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.Repositories;
-using OnlineCourse.Domain.Entities.Orders;
-using OnlineCourse.Service.Dtos.Orders;
-using OnlineCourse.Service.Helpers;
 using OnlineCourse.Service.Interfaces;
-using OnlineCourse.Service.Mappers;
+using OnlineCourse.Service.Dtos.Orders;
+using OnlineCourse.Domain.Entities.Orders;
 
 namespace OnlineCourse.Service.Services;
 

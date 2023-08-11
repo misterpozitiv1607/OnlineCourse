@@ -1,6 +1,5 @@
-﻿using OnlineCourse.Service.Dtos.CourseCategories;
-using OnlineCourse.Service.Dtos.Courses;
-using OnlineCourse.Service.Helpers;
+﻿using OnlineCourse.Service.Helpers;
+using OnlineCourse.Service.Dtos.CourseCategories;
 
 namespace OnlineCourse.Service.Interfaces;
 

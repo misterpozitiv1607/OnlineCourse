@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OnlineCourse.DAL.IRepositories;
+﻿using OnlineCourse.DAL.Contexts;
 using OnlineCourse.Domain.Commons;
-using OnlineCourse.DAL.Contexts;
+using Microsoft.EntityFrameworkCore;
+using OnlineCourse.DAL.IRepositories;
 namespace OnlineCourse.DAL.Repositories;
 
 public class Repository<T> : IRepository<T> where T : Auditable

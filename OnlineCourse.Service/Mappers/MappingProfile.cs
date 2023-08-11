@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
-using OnlineCourse.Domain.Entities.CourseCategories;
-using OnlineCourse.Domain.Entities.Courses;
+using OnlineCourse.Service.Dtos.Orders;
+using OnlineCourse.Service.Dtos.Courses;
+using OnlineCourse.Service.Dtos.Students;
+using OnlineCourse.Service.Dtos.Teachers;
 using OnlineCourse.Domain.Entities.Orders;
+using OnlineCourse.Domain.Entities.Courses;
 using OnlineCourse.Domain.Entities.Students;
 using OnlineCourse.Domain.Entities.Teachers;
 using OnlineCourse.Service.Dtos.CourseCategories;
-using OnlineCourse.Service.Dtos.Courses;
-using OnlineCourse.Service.Dtos.Orders;
-using OnlineCourse.Service.Dtos.Students;
-using OnlineCourse.Service.Dtos.Teachers;
+using OnlineCourse.Domain.Entities.CourseCategories;
+
+
+
 
 namespace OnlineCourse.Service.Mappers;
 

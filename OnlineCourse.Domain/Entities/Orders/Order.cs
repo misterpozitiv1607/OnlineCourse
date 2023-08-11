@@ -1,6 +1,5 @@
-﻿using OnlineCourse.Domain.Commons;
-using OnlineCourse.Domain.Entities.Courses;
-using OnlineCourse.Domain.Enums;
+﻿using OnlineCourse.Domain.Enums;
+using OnlineCourse.Domain.Commons;
 
 namespace OnlineCourse.Domain.Entities.Orders;
 

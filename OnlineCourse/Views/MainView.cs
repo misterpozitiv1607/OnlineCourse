@@ -1,8 +1,8 @@
-﻿using OnlineCourse.Views.CourseCategories;
+﻿using OnlineCourse.Views.Orders;
 using OnlineCourse.Views.Courses;
-using OnlineCourse.Views.Orders;
 using OnlineCourse.Views.Students;
 using OnlineCourse.Views.Teachers;
+using OnlineCourse.Views.CourseCategories;
 
 namespace OnlineCourse.Views;
 
@@ -10,11 +10,6 @@ public class MainView
 {
     public async void MainPage()
     {
-        TeacherServiceView teacherServiceView = new TeacherServiceView();
-        CourseCategoryServiceView courseCategoryServiceView = new CourseCategoryServiceView();
-        CourseServiceView courseServiceView = new CourseServiceView();
-        StudentServiceView studentServiceView = new StudentServiceView();
-        OrderServiceView orderServiceView = new OrderServiceView();
         Console.WriteLine(@"---------------- Main Page -----------------
 1.Teacher
 2.Student

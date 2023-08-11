@@ -1,6 +1,5 @@
-﻿using OnlineCourse.Service.Dtos.Students;
-using OnlineCourse.Service.Dtos.Teachers;
-using OnlineCourse.Service.Helpers;
+﻿using OnlineCourse.Service.Helpers;
+using OnlineCourse.Service.Dtos.Students;
 
 namespace OnlineCourse.Service.Interfaces;
 

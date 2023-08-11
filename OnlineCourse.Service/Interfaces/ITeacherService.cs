@@ -1,5 +1,5 @@
-﻿using OnlineCourse.Service.Dtos.Teachers;
-using OnlineCourse.Service.Helpers;
+﻿using OnlineCourse.Service.Helpers;
+using OnlineCourse.Service.Dtos.Teachers;
 
 namespace OnlineCourse.Service.Interfaces;
 
