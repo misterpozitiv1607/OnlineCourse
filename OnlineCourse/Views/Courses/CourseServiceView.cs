@@ -62,17 +62,16 @@ public class CourseServiceView
         Console.WriteLine("StudentId: ");
         long teacherId = long.Parse(Console.ReadLine());
 
-
-        var result = await courseService.UpdateAsync(new CourseUpdateDto
-        {
+        CourseUpdateDto courseUpdateDto = new CourseUpdateDto { 
+        
             Price = price,
             StartDate = start_date_time,
             EndDate = end_date,
             StudentId = studentId,
             OrderId = orderId,
             TeacherId = teacherId
-        });
-
+        };
+        var result = await courseService.UpdateAsync(courseUpdateDto);
         if (result.StatusCode == 200)
             Console.WriteLine(result.Data.Price + " " + result.Data.StudentResultDto.ToString().Count() + " " + result.Data.TeacherResultDto.FirstName + " " + result.Data.TeacherResultDto.LastName);
     }

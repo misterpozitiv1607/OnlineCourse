@@ -1,5 +1,5 @@
-﻿using OnlineCourse.Views.Teachers;
+﻿using OnlineCourse.Views;
 
-TeacherServiceView teacherServiceView = new();
-await teacherServiceView.GetAll();
+MainView mainView = new MainView();
+mainView.MainPage();
 

@@ -1,76 +1,57 @@
-﻿using OnlineCourse.Domain.Enums;
-using OnlineCourse.Service.Dtos.Orders;
-using OnlineCourse.Service.Dtos.Students;
+﻿using OnlineCourse.Service.Dtos.CourseCategories;
 using OnlineCourse.Service.Services;
 
 namespace OnlineCourse.Views.CourseCategories;
 
 public class CourseCategoryServiceView
 {
-    private StudentService studentService = new();
+    private CourseCategoryService coursecategoryService = new();
     public async void Create()
     {
-        Console.WriteLine("FirstName: ");
-        string first_name = Console.ReadLine();
+        Console.WriteLine("Name: ");
+        string name = Console.ReadLine();
 
-        Console.WriteLine("LastName: ");
-        string last_name = Console.ReadLine();
+        Console.WriteLine("Description: ");
+        string description = Console.ReadLine();
 
-        Console.WriteLine("Date Of Birth(example:yyyy-mm-dd)");
-        DateTime date = DateTime.Parse(Console.ReadLine());
+        Console.WriteLine("CourseId)");
+        long id = long.Parse(Console.ReadLine());
 
-        Console.WriteLine("Phone(example:+998xxxxxxxxx)");
-        string phone = Console.ReadLine();
-
-        Console.WriteLine("Email(example:example@gmail.com): ");
-        string email = Console.ReadLine();
-
-        var result = await studentService.CreateAsync(new StudentCreationDto
+        var result = await coursecategoryService.CreateAsync(new CourseCategoryCreationDto
         {
-            FirstName = first_name,
-            LastName = last_name,
-            DateOfBirth = date,
-            Phone = phone,
-            Email = email
+            Name = name,
+            Description = description,
+            CourseId = id
         });
 
         if (result.StatusCode == 200)
-            Console.WriteLine(result.Data.FirstName);
+            Console.WriteLine(result.Data.Name+" " + result.Data.Description+" " + result.Data.ToString().Count());
     }
 
     public async void Update()
     {
         Console.WriteLine("Id: ");
+        long Id = long.Parse(Console.ReadLine());
+
+        Console.WriteLine("Name: ");
+        string name = Console.ReadLine();
+
+        Console.WriteLine("Description: ");
+        string description = Console.ReadLine();
+
+        Console.WriteLine("CourseId)");
         long id = long.Parse(Console.ReadLine());
 
-        Console.WriteLine("FirstName: ");
-        string first_name = Console.ReadLine();
-
-        Console.WriteLine("LastName: ");
-        string last_name = Console.ReadLine();
-
-        Console.WriteLine("Date Of Birth(example:yyyy-mm-dd)");
-        DateTime date = DateTimeOffset.Parse(DateTime.Parse(Console.ReadLine()).ToString()).UtcDateTime;
-
-
-        Console.WriteLine("Phone(example:+998xxxxxxxxx)");
-        string phone = Console.ReadLine();
-
-        Console.WriteLine("Email(example:example@gmail.com): ");
-        string email = Console.ReadLine();
-
-        StudentUpdateDto studentUpdateDto = new StudentUpdateDto()
-        {
-            Id = id,
-            FirstName = first_name,
-            LastName = last_name,
-            DateOfBirth = date,
-            Phone = phone,
-            Email = email
+        CourseCategoryUpdateDto courseCategoryUpdateDto = new CourseCategoryUpdateDto 
+        { 
+            Id = Id,
+            Name = name,
+            Description = description,
+            CourseId = id
         };
-
-        await studentService.UpdateAsync(studentUpdateDto);
-
+        var result = await coursecategoryService.UpdateAsync(courseCategoryUpdateDto);
+        if (result.StatusCode == 200)
+            Console.WriteLine(result.Data.Name + " " + result.Data.Description + " " + result.Data.ToString().Count());
     }
 
     public async void Delete()
@@ -78,9 +59,8 @@ public class CourseCategoryServiceView
         Console.WriteLine("Id: ");
         long id = long.Parse(Console.ReadLine());
 
-        var result = await studentService.DeleteAsync(id);
-        Console.WriteLine(result.StatusCode);
-
+        var result = await coursecategoryService.DeleteAsync(id);
+        Console.WriteLine(result.Message);
     }
 
     public async void GetById()
@@ -88,16 +68,16 @@ public class CourseCategoryServiceView
         Console.WriteLine("Id: ");
         long id = long.Parse(Console.ReadLine());
 
-        var result = await studentService.GetByIdAsync(id);
-        Console.WriteLine(result.Message);
+        var result = await coursecategoryService.GetByIdAsync(id);
+        Console.WriteLine(result.Data.Name + " " + result.Data.Description + " " + result.Data.ToString().Count());
 
     }
 
     public async Task GetAll()
     {
-        var result = await studentService.GetAllAsync();
+        var result = await coursecategoryService.GetAllAsync();
 
         foreach (var item in result.Data)
-            Console.WriteLine(item.FirstName);
+            Console.WriteLine(item.Name + " " + item.Description + " " + item.ToString().Count());
     }
 }
