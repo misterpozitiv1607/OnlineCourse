@@ -27,7 +27,7 @@ public class Repository<T> : IRepository<T> where T : Auditable
     }
 
     public async Task<T> SelectById(long id)
-       => await this.appDbContex.Set<T>().FirstOrDefaultAsync(x => x.Id.Equals(id));
+       =>  this.appDbContex.Set<T>().FirstOrDefault(x => x.Id.Equals(id));
 
     public IQueryable<T> SelectAll()
        => this.appDbContex.Set<T>().AsNoTracking().AsQueryable();

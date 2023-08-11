@@ -19,8 +19,4 @@
     <ProjectReference Include="..\OnlineCourse.Service\OnlineCourse.Service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
-
 </Project>

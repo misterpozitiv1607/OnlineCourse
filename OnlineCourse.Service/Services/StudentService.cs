@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.Repositories;
 using OnlineCourse.Domain.Entities.Students;

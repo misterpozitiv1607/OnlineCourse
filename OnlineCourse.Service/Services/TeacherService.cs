@@ -33,7 +33,7 @@ public class TeacherService : ITeacherService
             };
 
         await this.unitOfWork.TeacherRepository.CreateAsync(teacher);
-        await this.unitOfWork.SaveAsync();
+        this.unitOfWork.SaveAsync();
 
         var result = this.mapper.Map<TeacherResultDto>(teacher);
         return new Response<TeacherResultDto>
@@ -51,13 +51,13 @@ public class TeacherService : ITeacherService
             return new Response<TeacherResultDto>
             {
                 StatusCode = 403,
-                Message = $"This teacher is not found Id:{existTeacher.Id}",
+                Message = $"This teacher is not found",
                 Data = null
             };
 
         var mappedTeacher = this.mapper.Map(dto, existTeacher);
-        this.unitOfWork.TeacherRepository.Update(mappedTeacher);
-        this.unitOfWork.SaveAsync();
+        this.unitOfWork.TeacherRepository.Update(existTeacher);
+        await this.unitOfWork.SaveAsync();
 
         var result = this.mapper.Map<TeacherResultDto>(mappedTeacher);
 
@@ -72,17 +72,18 @@ public class TeacherService : ITeacherService
 
     public async Task<Response<bool>> DeleteAsync(long id)
     {
-        Teacher existTeacher = await this.unitOfWork.TeacherRepository.SelectById(id);
+        Teacher existTeacher =await this.unitOfWork.TeacherRepository.SelectById(id);
 
         if (existTeacher is null)
             return new Response<bool>
             {
                 StatusCode = 403,
-                Message = $"This teacher is not found Id:{existTeacher.Id}",
+                Message = $"This teacher is not found",
                 Data = false
             };
         this.unitOfWork.TeacherRepository.Delete(existTeacher);
-        this.unitOfWork.SaveAsync();
+
+        await this.unitOfWork.SaveAsync();
 
         return new Response<bool>
         {
@@ -94,16 +95,17 @@ public class TeacherService : ITeacherService
 
     public async Task<Response<TeacherResultDto>> GetByIdAsync(long id)
     {
-        Teacher existTeacher = await this.unitOfWork.TeacherRepository.SelectById(id);
+        var existTeacher = await this.unitOfWork.TeacherRepository.SelectById(id);
         if (existTeacher is null)
             return new Response<TeacherResultDto>
             {
                 StatusCode = 403,
-                Message = $"This teacher is not fount Id:{existTeacher.Id}",
+                Message = $"This teacher is not fount",
                 Data = null
             };
 
         var result = this.mapper.Map<TeacherResultDto>(existTeacher);
+        await this.unitOfWork.SaveAsync();
 
         return new Response<TeacherResultDto>
         {
