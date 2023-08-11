@@ -61,7 +61,8 @@ public class OrderServiceView
             IsPayment = ispayment
         };
 
-        await orderService.UpdateAsync(orderUpdateDto);
+       var result = await orderService.UpdateAsync(orderUpdateDto);
+        Console.WriteLine(result.Message);
 
     }
 
