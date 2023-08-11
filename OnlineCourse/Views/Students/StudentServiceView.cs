@@ -1,4 +1,5 @@
-﻿using OnlineCourse.Service.Dtos.Teachers;
+﻿using OnlineCourse.Service.Dtos.Students;
+using OnlineCourse.Service.Dtos.Teachers;
 using OnlineCourse.Service.Services;
 
 namespace OnlineCourse.Views.Students;
@@ -23,21 +24,13 @@ public class StudentServiceView
         Console.WriteLine("Email(example:example@gmail.com): ");
         string email = Console.ReadLine();
 
-        Console.WriteLine("Experience:(number enter): ");
-        int experience = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Specialty(example:.Net): ");
-        string specialty = Console.ReadLine();
-
-        var result = await teacherService.CreateAsync(new TeacherCreationDto
+        var result = await studentService.CreateAsync(new StudentCreationDto
         {
             FirstName = first_name,
             LastName = last_name,
             DateOfBirth = date,
             Phone = phone,
-            Email = email,
-            Experince = experience,
-            Speciality = specialty
+            Email = email
         });
 
         if (result.StatusCode == 200)
@@ -65,26 +58,17 @@ public class StudentServiceView
         Console.WriteLine("Email(example:example@gmail.com): ");
         string email = Console.ReadLine();
 
-        Console.WriteLine("Experience:(number enter): ");
-        int experience = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Specialty(example:.Net): ");
-        string specialty = Console.ReadLine();
-
-
-        TeacherUpdateDto teacherUpdateDto = new TeacherUpdateDto()
+        StudentUpdateDto studentUpdateDto = new StudentUpdateDto()
         {
             Id = id,
             FirstName = first_name,
             LastName = last_name,
             DateOfBirth = date,
             Phone = phone,
-            Email = email,
-            Experince = experience,
-            Speciality = specialty
+            Email = email
         };
 
-        await teacherService.UpdateAsync(teacherUpdateDto);
+        await studentService.UpdateAsync(studentUpdateDto);
 
     }
 
@@ -93,7 +77,7 @@ public class StudentServiceView
         Console.WriteLine("Id: ");
         long id = long.Parse(Console.ReadLine());
 
-        var result = await teacherService.DeleteAsync(id);
+        var result = await studentService.DeleteAsync(id);
         Console.WriteLine(result.StatusCode);
 
     }
@@ -103,14 +87,14 @@ public class StudentServiceView
         Console.WriteLine("Id: ");
         long id = long.Parse(Console.ReadLine());
 
-        var result = await teacherService.GetByIdAsync(id);
+        var result = await studentService.GetByIdAsync(id);
         Console.WriteLine(result.Message);
 
     }
 
     public async Task GetAll()
     {
-        var result = await teacherService.GetAllAsync();
+        var result = await studentService.GetAllAsync();
 
         foreach (var item in result.Data)
             Console.WriteLine(item.FirstName);

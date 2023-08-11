@@ -1,39 +1,47 @@
-﻿using OnlineCourse.Service.Dtos.Students;
+﻿using OnlineCourse.Domain.Enums;
+using OnlineCourse.Service.Dtos.Orders;
+using OnlineCourse.Service.Dtos.Students;
 using OnlineCourse.Service.Services;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OnlineCourse.Views.Orders;
 
 public class OrderServiceView
 {
-    private StudentService studentService = new();
+    private OrderService orderService = new();
     public async void Create()
     {
-        Console.WriteLine("FirstName: ");
-        string first_name = Console.ReadLine();
+            //public int paymentCode;
+            //public PaymentMethod PaymentMethod;
+        Console.WriteLine("PaymentCode: ");
+        int payment_code = int.Parse(Console.ReadLine());
 
-        Console.WriteLine("LastName: ");
-        string last_name = Console.ReadLine();
-
-        Console.WriteLine("Date Of Birth(example:yyyy-mm-dd)");
-        DateTime date = DateTime.Parse(Console.ReadLine());
-
-        Console.WriteLine("Phone(example:+998xxxxxxxxx)");
-        string phone = Console.ReadLine();
-
-        Console.WriteLine("Email(example:example@gmail.com): ");
-        string email = Console.ReadLine();
-
-        var result = await studentService.CreateAsync(new StudentCreationDto
+        Console.WriteLine(@"Quyidagilarga mos son kiriting:
+1.Uzcard
+2.Humo,
+3.MasterCard,
+4.Visa");
+        OrderCreationDto orderCreationDto = new OrderCreationDto();
+        PaymentMethod paymentMethod = 0;
+        int number = int.Parse(Console.ReadLine());
+        switch (number)
         {
-            FirstName = first_name,
-            LastName = last_name,
-            DateOfBirth = date,
-            Phone = phone,
-            Email = email
-        });
-
-        if (result.StatusCode == 200)
-            Console.WriteLine(result.Data.FirstName);
+            case 1:
+                paymentMethod = PaymentMethod.Uzcard;
+                break;
+            case 2:
+                paymentMethod = PaymentMethod.Humo;
+                break;
+            case 3:
+                paymentMethod = PaymentMethod.MasterCard;
+                break;
+            case 4:
+                paymentMethod = PaymentMethod.Visa;
+                break;
+            default:
+                Console.WriteLine("Error!");
+                break;
+        }
     }
 
     public async void Update()
@@ -44,30 +52,16 @@ public class OrderServiceView
         Console.WriteLine("FirstName: ");
         string first_name = Console.ReadLine();
 
-        Console.WriteLine("LastName: ");
-        string last_name = Console.ReadLine();
+        Console.WriteLine("IsPayment(true or false enter: )");
+        bool ispayment = bool.Parse(Console.ReadLine());
 
-        Console.WriteLine("Date Of Birth(example:yyyy-mm-dd)");
-        DateTime date = DateTimeOffset.Parse(DateTime.Parse(Console.ReadLine()).ToString()).UtcDateTime;
-
-
-        Console.WriteLine("Phone(example:+998xxxxxxxxx)");
-        string phone = Console.ReadLine();
-
-        Console.WriteLine("Email(example:example@gmail.com): ");
-        string email = Console.ReadLine();
-
-        StudentUpdateDto studentUpdateDto = new StudentUpdateDto()
+        OrderUpdateDto orderUpdateDto = new OrderUpdateDto()
         {
             Id = id,
-            FirstName = first_name,
-            LastName = last_name,
-            DateOfBirth = date,
-            Phone = phone,
-            Email = email
+            IsPayment = ispayment
         };
 
-        await studentService.UpdateAsync(studentUpdateDto);
+        await orderService.UpdateAsync(orderUpdateDto);
 
     }
 
@@ -76,7 +70,7 @@ public class OrderServiceView
         Console.WriteLine("Id: ");
         long id = long.Parse(Console.ReadLine());
 
-        var result = await studentService.DeleteAsync(id);
+        var result = await orderService.DeleteAsync(id);
         Console.WriteLine(result.StatusCode);
 
     }
@@ -86,16 +80,16 @@ public class OrderServiceView
         Console.WriteLine("Id: ");
         long id = long.Parse(Console.ReadLine());
 
-        var result = await studentService.GetByIdAsync(id);
+        var result = await orderService.GetByIdAsync(id);
         Console.WriteLine(result.Message);
 
     }
 
     public async Task GetAll()
     {
-        var result = await studentService.GetAllAsync();
+        var result = await orderService.GetAllAsync();
 
         foreach (var item in result.Data)
-            Console.WriteLine(item.FirstName);
+            Console.WriteLine(item.PaymentMethod + " " + item.Id+" "+ item.IsPaymment);
     }
 }
