@@ -127,7 +127,7 @@ public class MainView
         switch (choice)
         {
             case 1:
-                teacherServiceView.GetAll();
+                await teacherServiceView.GetAll();
                 break;
             case 2:
                 teacherServiceView.Delete();
@@ -136,10 +136,10 @@ public class MainView
                 teacherServiceView.Update();
                 break;
             case 4:
-                studentServiceView.GetAll();
+                await studentServiceView.GetAll();
                 break;
             case 5:
-                courseServiceView.GetAll();
+                await courseServiceView.GetAll();
                 break;
             case 0:
                 TeacherPage();

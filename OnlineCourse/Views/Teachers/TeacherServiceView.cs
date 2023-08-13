@@ -142,7 +142,9 @@ C.Nono-Generic");
                 Speciality = specialty
             };
 
-           await teacherService.UpdateAsync(teacherUpdateDto);
+          var result = await teacherService.UpdateAsync(teacherUpdateDto);
+            Console.WriteLine(result.Message);
+        
 
         }
 
@@ -152,7 +154,7 @@ C.Nono-Generic");
             long id = long.Parse(Console.ReadLine());
 
             var result = await teacherService.DeleteAsync(id);
-            Console.WriteLine(result.StatusCode);
+            Console.WriteLine(result.Message);
             
         }
 

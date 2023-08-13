@@ -34,7 +34,7 @@ public class StudentService : IStudentService
             };
 
         await this.unitOfWork.StudentRepository.CreateAsync(student);
-        await this.unitOfWork.SaveAsync();
+        this.unitOfWork.SaveAsync();
 
         var result = this.mapper.Map<StudentResultDto>(student);
         return new Response<StudentResultDto>
@@ -61,6 +61,7 @@ public class StudentService : IStudentService
         this.unitOfWork.SaveAsync();
 
         var result = this.mapper.Map<StudentResultDto>(mappedStudent);
+        Console.WriteLine(result.FirstName);
 
         return new Response<StudentResultDto>
         {

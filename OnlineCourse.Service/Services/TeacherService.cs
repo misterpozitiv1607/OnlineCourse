@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using OnlineCourse.Service.Helpers;
-using OnlineCourse.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.Repositories;
-using OnlineCourse.Service.Interfaces;
-using OnlineCourse.Service.Dtos.Teachers;
 using OnlineCourse.Domain.Entities.Teachers;
+using OnlineCourse.Service.Dtos.Teachers;
+using OnlineCourse.Service.Helpers;
+using OnlineCourse.Service.Interfaces;
+using OnlineCourse.Service.Mappers;
 
 namespace OnlineCourse.Service.Services;
 
@@ -105,7 +105,7 @@ public class TeacherService : ITeacherService
             };
 
         var result = this.mapper.Map<TeacherResultDto>(existTeacher);
-        await this.unitOfWork.SaveAsync();
+        athis.unitOfWork.SaveAsync();
 
         return new Response<TeacherResultDto>
         {

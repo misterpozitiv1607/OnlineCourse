@@ -139,7 +139,7 @@ C. 403");
         long id = long.Parse(Console.ReadLine());
 
         var result = await studentService.GetByIdAsync(id);
-        Console.WriteLine(result.Message);
+        Console.WriteLine(result.Data.FirstName+" | "+result.Data.LastName);
 
     }
 
