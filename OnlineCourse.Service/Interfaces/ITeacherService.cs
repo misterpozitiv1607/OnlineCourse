@@ -4,9 +4,9 @@ namespace OnlineCourse.Service.Interfaces;
 
 public interface ITeacherService
 {
-    Task<TeacherResultDto> CreateAsync(TeacherCreationDto dto);
-    Task<TeacherResultDto> UpdateAsync(TeacherUpdateDto dto);
-    Task<bool> DeleteAsync(long id);
-    Task<TeacherResultDto> GetByIdAsync(long id);
-    Task<IEnumerable<TeacherResultDto>> GetAllAsync();
+    Task<TeacherResultDto> AddAsync(TeacherCreationDto dto);
+    Task<TeacherResultDto> ModifyAsync(TeacherUpdateDto dto);
+    Task<bool> RemoveAsync(long id);
+    Task<TeacherResultDto> RetrieveByIdAsync(long id);
+    Task<IEnumerable<TeacherResultDto>> RetrieveAllAsync();
 }
