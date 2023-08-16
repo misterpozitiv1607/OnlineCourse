@@ -1,13 +1,12 @@
-﻿using OnlineCourse.Service.Helpers;
-using OnlineCourse.Service.Dtos.Courses;
+﻿using OnlineCourse.Service.Dtos.Courses;
 
 namespace OnlineCourse.Service.Interfaces;
 
 public interface ICourseService
 {
-    Task<Response<CourseResultDto>> CreateAsync(CourseCreationDto dto);
-    Task<Response<CourseResultDto>> UpdateAsync(CourseUpdateDto dto);
-    Task<Response<bool>> DeleteAsync(long id);
-    Task<Response<CourseResultDto>> GetByIdAsync(long id);
-    Task<Response<IEnumerable<CourseResultDto>>> GetAllAsync();
+    Task<CourseResultDto> CreateAsync(CourseCreationDto dto);
+    Task<CourseResultDto> UpdateAsync(CourseUpdateDto dto);
+    Task<bool> DeleteAsync(long id);
+    Task<CourseResultDto> GetByIdAsync(long id);
+    Task<IEnumerable<CourseResultDto>> GetAllAsync();
 }
