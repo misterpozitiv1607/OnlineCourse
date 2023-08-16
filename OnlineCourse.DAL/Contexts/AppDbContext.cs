@@ -10,11 +10,7 @@ namespace OnlineCourse.DAL.Contexts;
 
 public class AppDbContext:DbContext
 {
-    //public AppDbContext()
-    //{
-    //    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-    //}
-
+  
     public DbSet<Student> Students { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Course> Courses { get; set; }

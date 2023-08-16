@@ -105,7 +105,7 @@ public class TeacherService : ITeacherService
             };
 
         var result = this.mapper.Map<TeacherResultDto>(existTeacher);
-        athis.unitOfWork.SaveAsync();
+        this.unitOfWork.SaveAsync();
 
         return new Response<TeacherResultDto>
         {

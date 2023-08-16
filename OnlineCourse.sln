@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse", "OnlineCourse\OnlineCourse.csproj", "{B32C3426-E874-4925-A399-0F5E63DAF6F5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.DAL", "OnlineCourse.DAL\OnlineCourse.DAL.csproj", "{63FBDD38-9714-4C09-82B3-082FBD430B96}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.Domain", "OnlineCourse.Domain\OnlineCourse.Domain.csproj", "{5DEAD298-45BD-4FB7-ABBB-00F0A5B4AE0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineCourse.Service", "OnlineCourse.Service\OnlineCourse.Service.csproj", "{F106179A-1EDC-4F42-B6AD-7347FAD6BF41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.Service", "OnlineCourse.Service\OnlineCourse.Service.csproj", "{F106179A-1EDC-4F42-B6AD-7347FAD6BF41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineCourse.Api", "OnlineCourse.Api\OnlineCourse.Api.csproj", "{C7FCD657-2308-44C5-ADD4-A1A0F369CB2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B32C3426-E874-4925-A399-0F5E63DAF6F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B32C3426-E874-4925-A399-0F5E63DAF6F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B32C3426-E874-4925-A399-0F5E63DAF6F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B32C3426-E874-4925-A399-0F5E63DAF6F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{63FBDD38-9714-4C09-82B3-082FBD430B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63FBDD38-9714-4C09-82B3-082FBD430B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63FBDD38-9714-4C09-82B3-082FBD430B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{F106179A-1EDC-4F42-B6AD-7347FAD6BF41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F106179A-1EDC-4F42-B6AD-7347FAD6BF41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F106179A-1EDC-4F42-B6AD-7347FAD6BF41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7FCD657-2308-44C5-ADD4-A1A0F369CB2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7FCD657-2308-44C5-ADD4-A1A0F369CB2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7FCD657-2308-44C5-ADD4-A1A0F369CB2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7FCD657-2308-44C5-ADD4-A1A0F369CB2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
