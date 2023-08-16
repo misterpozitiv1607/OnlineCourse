@@ -4,9 +4,9 @@ namespace OnlineCourse.Service.Interfaces;
 
 public interface ICourseCategoryService
 {
-    Task<CourseCategoryResultDto> CreateAsync(CourseCategoryCreationDto dto);
-    Task<CourseCategoryResultDto> UpdateAsync(CourseCategoryUpdateDto dto);
-    Task<bool> DeleteAsync(long id);
-    Task<CourseCategoryResultDto> GetByIdAsync(long id);
-    Task<IEnumerable<CourseCategoryResultDto>> GetAllAsync();
+    Task<CourseCategoryResultDto> AddAsync(CourseCategoryCreationDto dto);
+    Task<CourseCategoryResultDto> ModifyAsync(CourseCategoryUpdateDto dto);
+    Task<bool> RemoveAsync(long id);
+    Task<CourseCategoryResultDto> RetrieveByIdAsync(long id);
+    Task<IEnumerable<CourseCategoryResultDto>> RetrieveAllAsync();
 }
