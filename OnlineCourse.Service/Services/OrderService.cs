@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using OnlineCourse.Service.Helpers;
 using OnlineCourse.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.Repositories;
@@ -20,40 +19,26 @@ public class OrderService : IOrderService
         this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
 
     }
-    public async Task<Response<OrderResultDto>> CreateAsync(OrderCreationDto dto)
+    public async Task<OrderResultDto> AddAsync(OrderCreationDto dto)
     {
         Order order = mapper.Map<Order>(dto);
         var existOrder = unitOfWork.OrderRepository.SelectAll().FirstOrDefault(u => u.PaymentCode.Equals(dto.paymentCode));
 
         if (existOrder is not null)
-            return new Response<OrderResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This order allready exist PaymentCode:{existOrder.PaymentCode}"
-            };
+            return null;
 
         await this.unitOfWork.OrderRepository.CreateAsync(order);
         await this.unitOfWork.SaveAsync();
 
         var result = this.mapper.Map<OrderResultDto>(order);
-        return new Response<OrderResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
-    public async Task<Response<OrderResultDto>> UpdateAsync(OrderUpdateDto dto)
+    public async Task<OrderResultDto> ModifyAsync(OrderUpdateDto dto)
     {
         Order existOrder = await this.unitOfWork.OrderRepository.SelectById(dto.Id);
         if (existOrder is null)
-            return new Response<OrderResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This order is not found Id:{existOrder.Id}",
-                Data = null
-            };
+            return null;
 
         var mappedOrder = this.mapper.Map(dto, existOrder);
         this.unitOfWork.OrderRepository.Update(mappedOrder);
@@ -61,60 +46,35 @@ public class OrderService : IOrderService
 
         var result = this.mapper.Map<OrderResultDto>(mappedOrder);
 
-        return new Response<OrderResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
 
     }
 
-    public async Task<Response<bool>> DeleteAsync(long id)
+    public async Task<bool> RemoveAsync(long id)
     {
         Order existOrder = await this.unitOfWork.OrderRepository.SelectById(id);
 
         if (existOrder is null)
-            return new Response<bool>
-            {
-                StatusCode = 403,
-                Message = $"This order is not found Id:{existOrder.Id}",
-                Data = false
-            };
+            return false;
         this.unitOfWork.OrderRepository.Delete(existOrder);
         this.unitOfWork.SaveAsync();
 
-        return new Response<bool>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = true
-        };
+        return true;
     }
 
-    public async Task<Response<OrderResultDto>> GetByIdAsync(long id)
+    public async Task<OrderResultDto> RetrieveByIdAsync(long id)
     {
         Order existOrder = await this.unitOfWork.OrderRepository.SelectById(id);
         if (existOrder is null)
-            return new Response<OrderResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This order is not found Id:{existOrder.Id}",
-                Data = null
-            };
+            return null;
 
         var result = this.mapper.Map<OrderResultDto>(existOrder);
 
-        return new Response<OrderResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
 
-    public async Task<Response<IEnumerable<OrderResultDto>>> GetAllAsync()
+    public async Task<IEnumerable<OrderResultDto>> RetrieveAllAsync()
     {
         var orders = await this.unitOfWork.OrderRepository.SelectAll().ToListAsync();
 
@@ -125,12 +85,7 @@ public class OrderService : IOrderService
         }
 
         var result = this.mapper.Map<IEnumerable<OrderResultDto>>(orders);
-        return new Response<IEnumerable<OrderResultDto>>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }   
     
 }
