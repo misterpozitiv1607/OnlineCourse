@@ -10,15 +10,16 @@ namespace OnlineCourse.DAL.Repositories;
 
 public class UnitOfWork:IUnitOfWork
 {
-    private readonly AppDbContext appDbContex;
-    public UnitOfWork()
+    private readonly AppDbContext _dbContex;
+
+    public UnitOfWork(AppDbContext dbContext)
     {
-        appDbContex = new AppDbContext();
-        StudentRepository = new Repository<Student>(appDbContex);
-        OrderRepository = new Repository<Order>(appDbContex);
-        CourseRepository = new Repository<Course>(appDbContex);
-        CourseCategoryRepository = new Repository<CourseCategory>(appDbContex);
-        TeacherRepository = new Repository<Teacher>(appDbContex);
+        _dbContex = dbContext;
+        StudentRepository = new Repository<Student>(_dbContex);
+        OrderRepository = new Repository<Order>(_dbContex);
+        CourseRepository = new Repository<Course>(_dbContex);
+        CourseCategoryRepository = new Repository<CourseCategory>(_dbContex);
+        TeacherRepository = new Repository<Teacher>(_dbContex);
     }
     public IRepository<Order> OrderRepository { get; }
     public IRepository<Student> StudentRepository { get; }
@@ -34,6 +35,6 @@ public class UnitOfWork:IUnitOfWork
 
     public async Task SaveAsync()
     {
-        await this.appDbContex.SaveChangesAsync();
+        await this._dbContex.SaveChangesAsync();
     }
 }

@@ -1,91 +1,76 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using OnlineCourse.DAL.Repositories;
+using OnlineCourse.DAL.IRepositories;
 using OnlineCourse.Domain.Entities.Teachers;
 using OnlineCourse.Service.Dtos.Teachers;
+using OnlineCourse.Service.Exceptions;
 using OnlineCourse.Service.Interfaces;
-using OnlineCourse.Service.Mappers;
 
 namespace OnlineCourse.Service.Services;
 
 public class TeacherService : ITeacherService
 {
-    private readonly Mapper mapper;
-    private readonly UnitOfWork unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public TeacherService()
+    public TeacherService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        this.unitOfWork = new UnitOfWork();
-        this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
-
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
+
     public async Task<TeacherResultDto> AddAsync(TeacherCreationDto dto)
     {
-        Teacher teacher = mapper.Map<Teacher>(dto);
-        var existTeacher = unitOfWork.TeacherRepository.SelectAll().FirstOrDefault(u => u.Phone.Equals(dto.Phone));
+        Teacher existTeacher = await _unitOfWork.TeacherRepository.SelectAsync(e => e.Email == dto.Email);
+        if (existTeacher != null)
+            throw new AlreadyExistException("This Teacher is already exist with this Email");
 
-        if (existTeacher is not null)
-            return null;
+        var mappedTeacher = _mapper.Map<Teacher>(dto);
+        await _unitOfWork.TeacherRepository.CreateAsync(mappedTeacher);
+        await _unitOfWork.SaveAsync();
 
-        await this.unitOfWork.TeacherRepository.CreateAsync(teacher);
-        this.unitOfWork.SaveAsync();
-
-        var result = this.mapper.Map<TeacherResultDto>(teacher);
+        var result = _mapper.Map<TeacherResultDto>(mappedTeacher);
         return result;
     }
 
     public async Task<TeacherResultDto> ModifyAsync(TeacherUpdateDto dto)
     {
-        Teacher existTeacher = await this.unitOfWork.TeacherRepository.SelectById(dto.Id);
-        if (existTeacher is null)
-            return null;
+        Teacher existTeacher = await _unitOfWork.TeacherRepository.SelectAsync(e => e.Id == dto.Id);
+        if (existTeacher == null)
+            throw new NotFoundException("This Teacher is not found with this id");
 
-        var mappedTeacher = this.mapper.Map(dto, existTeacher);
-        this.unitOfWork.TeacherRepository.Update(existTeacher);
-        await this.unitOfWork.SaveAsync();
+        _mapper.Map(dto, existTeacher);
+        _unitOfWork.TeacherRepository.Update(existTeacher);
+        await _unitOfWork.SaveAsync();
 
-        var result = this.mapper.Map<TeacherResultDto>(mappedTeacher);
-
+        var result = _mapper.Map<TeacherResultDto>(existTeacher);
         return result;
-
     }
 
     public async Task<bool> RemoveAsync(long id)
     {
-        Teacher existTeacher =await this.unitOfWork.TeacherRepository.SelectById(id);
+        Teacher existTeacher = await _unitOfWork.TeacherRepository.SelectAsync(e => e.Id == id);
+        if (existTeacher == null)
+            throw new NotFoundException("This Teacher is not found with this id");
 
-        if (existTeacher is null)
-            return false;
-        this.unitOfWork.TeacherRepository.Delete(existTeacher);
-
-        await this.unitOfWork.SaveAsync();
-
+        _unitOfWork.TeacherRepository.Delete(existTeacher);
+        await _unitOfWork.SaveAsync();
         return true;
     }
 
     public async Task<TeacherResultDto> RetrieveByIdAsync(long id)
     {
-        var existTeacher = await this.unitOfWork.TeacherRepository.SelectById(id);
-        if (existTeacher is null)
-            return null;
+        Teacher existTeacher = await _unitOfWork.TeacherRepository.SelectAsync(e => e.Id == id);
+        if (existTeacher == null)
+            throw new NotFoundException("This Teacher is not found with this id");
 
-        var result = this.mapper.Map<TeacherResultDto>(existTeacher);
-        this.unitOfWork.SaveAsync();
-
+        var result = _mapper.Map<TeacherResultDto>(existTeacher);
         return result;
     }
 
     public async Task<IEnumerable<TeacherResultDto>> RetrieveAllAsync()
     {
-        var teachers = await this.unitOfWork.TeacherRepository.SelectAll().ToListAsync();
-
-
-        foreach (var item in teachers)
-        {
-            Teacher teacher = await this.unitOfWork.TeacherRepository.SelectById(item.Id);
-        }
-
-        var result = this.mapper.Map<IEnumerable<TeacherResultDto>>(teachers);
+        var query = await _unitOfWork.TeacherRepository.SelectAll();
+        var result = _mapper.Map<IEnumerable<TeacherResultDto>>(query);
         return result;
     }
 }

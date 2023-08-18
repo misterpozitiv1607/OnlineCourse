@@ -1,92 +1,76 @@
 ﻿using AutoMapper;
-using OnlineCourse.Service.Mappers;
-using Microsoft.EntityFrameworkCore;
-using OnlineCourse.DAL.Repositories;
-using OnlineCourse.Service.Interfaces;
-using OnlineCourse.Service.Dtos.Orders;
+using OnlineCourse.DAL.IRepositories;
 using OnlineCourse.Domain.Entities.Orders;
+using OnlineCourse.Service.Dtos.Orders;
+using OnlineCourse.Service.Exceptions;
+using OnlineCourse.Service.Interfaces;
 
 namespace OnlineCourse.Service.Services;
 
 public class OrderService : IOrderService
 {
-    private readonly Mapper mapper;
-    private readonly UnitOfWork unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public OrderService()
+    public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        this.unitOfWork = new UnitOfWork();
-        this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
-
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
+
     public async Task<OrderResultDto> AddAsync(OrderCreationDto dto)
     {
-        Order order = mapper.Map<Order>(dto);
-        var existOrder = unitOfWork.OrderRepository.SelectAll().FirstOrDefault(u => u.PaymentCode.Equals(dto.paymentCode));
+        Order existOrder = await _unitOfWork.OrderRepository.SelectAsync(e => e.PaymentMethod == dto.PaymentMethod && e.PaymentCode==dto.paymentCode);
+        if (existOrder != null)
+            throw new AlreadyExistException("This Order is already exist with this Email");
 
-        if (existOrder is not null)
-            return null;
+        var mappedTeacher = _mapper.Map<Order>(dto);
+        await _unitOfWork.OrderRepository.CreateAsync(mappedTeacher);
+        await _unitOfWork.SaveAsync();
 
-        await this.unitOfWork.OrderRepository.CreateAsync(order);
-        await this.unitOfWork.SaveAsync();
-
-        var result = this.mapper.Map<OrderResultDto>(order);
+        var result = _mapper.Map<OrderResultDto>(mappedTeacher);
         return result;
     }
 
     public async Task<OrderResultDto> ModifyAsync(OrderUpdateDto dto)
     {
-        Order existOrder = await this.unitOfWork.OrderRepository.SelectById(dto.Id);
-        if (existOrder is null)
-            return null;
+        Order existOrder = await _unitOfWork.OrderRepository.SelectAsync(e => e.Id == dto.Id);
+        if (existOrder == null)
+            throw new NotFoundException("This Order is not found with this id");
 
-        var mappedOrder = this.mapper.Map(dto, existOrder);
-        this.unitOfWork.OrderRepository.Update(mappedOrder);
-        this.unitOfWork.SaveAsync();
+        _mapper.Map(dto, existOrder);
+        _unitOfWork.OrderRepository.Update(existOrder);
+        await _unitOfWork.SaveAsync();
 
-        var result = this.mapper.Map<OrderResultDto>(mappedOrder);
-
+        var result = _mapper.Map<OrderResultDto>(existOrder);
         return result;
-
     }
 
     public async Task<bool> RemoveAsync(long id)
     {
-        Order existOrder = await this.unitOfWork.OrderRepository.SelectById(id);
+        Order existOrder = await _unitOfWork.OrderRepository.SelectAsync(e => e.Id == id);
+        if (existOrder == null)
+            throw new NotFoundException("This Order is not found with this id");
 
-        if (existOrder is null)
-            return false;
-        this.unitOfWork.OrderRepository.Delete(existOrder);
-        this.unitOfWork.SaveAsync();
-
+        _unitOfWork.OrderRepository.Delete(existOrder);
+        await _unitOfWork.SaveAsync();
         return true;
     }
 
     public async Task<OrderResultDto> RetrieveByIdAsync(long id)
     {
-        Order existOrder = await this.unitOfWork.OrderRepository.SelectById(id);
-        if (existOrder is null)
-            return null;
+        Order existOrder = await _unitOfWork.OrderRepository.SelectAsync(e => e.Id == id);
+        if (existOrder == null)
+            throw new NotFoundException("This Order is not found with this id");
 
-        var result = this.mapper.Map<OrderResultDto>(existOrder);
-
+        var result = _mapper.Map<OrderResultDto>(existOrder);
         return result;
     }
 
-
     public async Task<IEnumerable<OrderResultDto>> RetrieveAllAsync()
     {
-        var orders = await this.unitOfWork.OrderRepository.SelectAll().ToListAsync();
-
-
-        foreach (var item in orders)
-        {
-            Order order = await this.unitOfWork.OrderRepository.SelectById(item.Id);
-        }
-
-        var result = this.mapper.Map<IEnumerable<OrderResultDto>>(orders);
+        var query = await _unitOfWork.OrderRepository.SelectAll();
+        var result = _mapper.Map<IEnumerable<OrderResultDto>>(query);
         return result;
-    }   
-    
+    }
 }
-

@@ -1,89 +1,76 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using OnlineCourse.DAL.Repositories;
+using OnlineCourse.DAL.IRepositories;
 using OnlineCourse.Domain.Entities.Courses;
 using OnlineCourse.Service.Dtos.Courses;
+using OnlineCourse.Service.Exceptions;
 using OnlineCourse.Service.Interfaces;
-using OnlineCourse.Service.Mappers;
 
 namespace OnlineCourse.Service.Services;
 
 public class CourseService : ICourseService
 {
-    private readonly Mapper mapper;
-    private readonly UnitOfWork unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public CourseService()
+    public CourseService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        this.unitOfWork = new UnitOfWork();
-        this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
-
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<CourseResultDto> AddAsync(CourseCreationDto dto)
     {
-        Course  course = mapper.Map<Course>(dto);
-        var existCourse = unitOfWork.CourseRepository.SelectAll().FirstOrDefault(u => u.StartDate.Equals(dto.StartDate));
+        Course existCourse = await _unitOfWork.CourseRepository.SelectAsync(e => e.StudentId == dto.StudentId && e.OrderId ==dto.OrderId);
+        if (existCourse != null)
+            throw new AlreadyExistException("This Course is already exist with this Id's");
 
-        if (existCourse is not null)
-            return null;
+        var mappedCourse = _mapper.Map<Course>(dto);
+        await _unitOfWork.CourseRepository.CreateAsync(mappedCourse);
+        await _unitOfWork.SaveAsync();
 
-        await this.unitOfWork.CourseRepository.CreateAsync(course);
-        await this.unitOfWork.SaveAsync();
-
-        var result = this.mapper.Map<CourseResultDto>(course);
+        var result = _mapper.Map<CourseResultDto>(mappedCourse);
         return result;
     }
 
     public async Task<CourseResultDto> ModifyAsync(CourseUpdateDto dto)
     {
-        Course existCourse = await this.unitOfWork.CourseRepository.SelectById(dto.Id);
-        if (existCourse is null)
-            return null;
+        Course existCourse = await _unitOfWork.CourseRepository.SelectAsync(e => e.Id == dto.Id);
+        if (existCourse == null)
+            throw new NotFoundException("This Course is not found with this id");
 
-        var mappedCourse = this.mapper.Map(dto, existCourse);
-        this.unitOfWork.CourseRepository.Update(mappedCourse);
-        this.unitOfWork.SaveAsync();
+        _mapper.Map(dto, existCourse);
+        _unitOfWork.CourseRepository.Update(existCourse);
+        await _unitOfWork.SaveAsync();
 
-        var result = this.mapper.Map<CourseResultDto>(mappedCourse);
-
+        var result = _mapper.Map<CourseResultDto>(existCourse);
         return result;
     }
 
     public async Task<bool> RemoveAsync(long id)
     {
-        Course existCourse = await this.unitOfWork.CourseRepository.SelectById(id);
+        Course existCourse = await _unitOfWork.CourseRepository.SelectAsync(e => e.Id == id);
+        if (existCourse == null)
+            throw new NotFoundException("This Course is not found with this id");
 
-        if (existCourse is null)
-            return false;
-        this.unitOfWork.CourseRepository.Delete(existCourse);
-        this.unitOfWork.SaveAsync();
-
+        _unitOfWork.CourseRepository.Delete(existCourse);
+        await _unitOfWork.SaveAsync();
         return true;
     }
 
     public async Task<CourseResultDto> RetrieveByIdAsync(long id)
     {
-        Course existCourse = await this.unitOfWork.CourseRepository.SelectById(id);
-        if (existCourse is null)
-            return null;
+        Course existCourse = await _unitOfWork.CourseRepository.SelectAsync(e => e.Id == id);
+        if (existCourse == null)
+            throw new NotFoundException("This Course is not found with this id");
 
-        var result = this.mapper.Map<CourseResultDto>(existCourse);
-
+        var result = _mapper.Map<CourseResultDto>(existCourse);
         return result;
     }
 
     public async Task<IEnumerable<CourseResultDto>> RetrieveAllAsync()
     {
-        var courses = await this.unitOfWork.CourseRepository.SelectAll().ToListAsync();
-
-
-        foreach (var item in courses)
-        {
-            Course course = await this.unitOfWork.CourseRepository.SelectById(item.Id);
-        }
-
-        var result = this.mapper.Map<IEnumerable<CourseResultDto>>(courses);
+        var query = await _unitOfWork.CourseRepository.SelectAll();
+        var result = _mapper.Map<IEnumerable<CourseResultDto>>(query);
         return result;
     }
 }
