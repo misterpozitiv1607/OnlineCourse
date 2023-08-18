@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.Repositories;
 using OnlineCourse.Domain.Entities.Teachers;
 using OnlineCourse.Service.Dtos.Teachers;
-using OnlineCourse.Service.Helpers;
 using OnlineCourse.Service.Interfaces;
 using OnlineCourse.Service.Mappers;
 
@@ -20,40 +19,26 @@ public class TeacherService : ITeacherService
         this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
 
     }
-    public async Task<Response<TeacherResultDto>> CreateAsync(TeacherCreationDto dto)
+    public async Task<TeacherResultDto> AddAsync(TeacherCreationDto dto)
     {
         Teacher teacher = mapper.Map<Teacher>(dto);
         var existTeacher = unitOfWork.TeacherRepository.SelectAll().FirstOrDefault(u => u.Phone.Equals(dto.Phone));
 
         if (existTeacher is not null)
-            return new Response<TeacherResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This teacher allready exist Phone:{existTeacher.Phone}"
-            };
+            return null;
 
         await this.unitOfWork.TeacherRepository.CreateAsync(teacher);
         this.unitOfWork.SaveAsync();
 
         var result = this.mapper.Map<TeacherResultDto>(teacher);
-        return new Response<TeacherResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
-    public async Task<Response<TeacherResultDto>> UpdateAsync(TeacherUpdateDto dto)
+    public async Task<TeacherResultDto> ModifyAsync(TeacherUpdateDto dto)
     {
         Teacher existTeacher = await this.unitOfWork.TeacherRepository.SelectById(dto.Id);
         if (existTeacher is null)
-            return new Response<TeacherResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This teacher is not found",
-                Data = null
-            };
+            return null;
 
         var mappedTeacher = this.mapper.Map(dto, existTeacher);
         this.unitOfWork.TeacherRepository.Update(existTeacher);
@@ -61,61 +46,36 @@ public class TeacherService : ITeacherService
 
         var result = this.mapper.Map<TeacherResultDto>(mappedTeacher);
 
-        return new Response<TeacherResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
 
     }
 
-    public async Task<Response<bool>> DeleteAsync(long id)
+    public async Task<bool> RemoveAsync(long id)
     {
         Teacher existTeacher =await this.unitOfWork.TeacherRepository.SelectById(id);
 
         if (existTeacher is null)
-            return new Response<bool>
-            {
-                StatusCode = 403,
-                Message = $"This teacher is not found",
-                Data = false
-            };
+            return false;
         this.unitOfWork.TeacherRepository.Delete(existTeacher);
 
         await this.unitOfWork.SaveAsync();
 
-        return new Response<bool>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = true
-        };
+        return true;
     }
 
-    public async Task<Response<TeacherResultDto>> GetByIdAsync(long id)
+    public async Task<TeacherResultDto> RetrieveByIdAsync(long id)
     {
         var existTeacher = await this.unitOfWork.TeacherRepository.SelectById(id);
         if (existTeacher is null)
-            return new Response<TeacherResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This teacher is not fount",
-                Data = null
-            };
+            return null;
 
         var result = this.mapper.Map<TeacherResultDto>(existTeacher);
         this.unitOfWork.SaveAsync();
 
-        return new Response<TeacherResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
-    public async Task<Response<IEnumerable<TeacherResultDto>>> GetAllAsync()
+    public async Task<IEnumerable<TeacherResultDto>> RetrieveAllAsync()
     {
         var teachers = await this.unitOfWork.TeacherRepository.SelectAll().ToListAsync();
 
@@ -126,11 +86,6 @@ public class TeacherService : ITeacherService
         }
 
         var result = this.mapper.Map<IEnumerable<TeacherResultDto>>(teachers);
-        return new Response<IEnumerable<TeacherResultDto>>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 }
