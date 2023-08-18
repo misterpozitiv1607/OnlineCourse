@@ -6,6 +6,7 @@ namespace OnlineCourse.Service.Dtos.Courses;
 
 public class CourseCreationDto
 {
+
     public double Price { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
