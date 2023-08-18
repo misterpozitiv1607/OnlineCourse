@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineCourse.Service.Dtos.CourseCategories;
-using OnlineCourse.Service.Dtos.Orders;
+using OnlineCourse.Service.Dtos.Teachers;
 using OnlineCourse.Service.Interfaces;
 
 namespace OnlineCourse.WebApi.Controllers;
@@ -9,9 +8,9 @@ namespace OnlineCourse.WebApi.Controllers;
 [Route("api/[controller]")]
 public class TeacherController : ControllerBase
 {
-    private readonly IOrderService _service;
+    private readonly ITeacherService _service;
 
-    public OrderController(IOrderService service)
+    public TeacherController(ITeacherService service)
     {
         _service = service;
     }
@@ -19,7 +18,7 @@ public class TeacherController : ControllerBase
     [HttpPost("Create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PostAsync(OrderCreationDto dto)
+    public async Task<IActionResult> PostAsync(TeacherCreationDto dto)
     {
         var result = await _service.AddAsync(dto);
         return Ok(result);
@@ -28,7 +27,7 @@ public class TeacherController : ControllerBase
     [HttpPut("Update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> PutAsync(OrderUpdateDto dto)
+    public async Task<IActionResult> PutAsync(TeacherUpdateDto dto)
     {
         var result = await _service.ModifyAsync(dto);
         return Ok(result);
