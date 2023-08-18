@@ -21,40 +21,26 @@ public class StudentService : IStudentService
 
     }
 
-    public async Task<Response<StudentResultDto>> CreateAsync(StudentCreationDto dto)
+    public async Task<StudentResultDto> AddAsync(StudentCreationDto dto)
     {
         Student student = mapper.Map<Student>(dto);
         var existStudent = unitOfWork.StudentRepository.SelectAll().FirstOrDefault(u => u.Phone.Equals(dto.Phone));
 
         if (existStudent is not null)
-            return new Response<StudentResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This student allready exist Phone:{existStudent.Phone}"
-            };
+            return null;
 
         await this.unitOfWork.StudentRepository.CreateAsync(student);
         this.unitOfWork.SaveAsync();
 
         var result = this.mapper.Map<StudentResultDto>(student);
-        return new Response<StudentResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
-    public async Task<Response<StudentResultDto>> UpdateAsync(StudentUpdateDto dto)
+    public async Task<StudentResultDto> ModifyAsync(StudentUpdateDto dto)
     {
         Student existStudent = await this.unitOfWork.StudentRepository.SelectById(dto.Id);
         if (existStudent is null)
-            return new Response<StudentResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This student is not found Id:{existStudent.Id}",
-                Data = null
-            };
+            return null;
 
         var mappedStudent = this.mapper.Map(dto, existStudent);
         this.unitOfWork.StudentRepository.Update(mappedStudent);
@@ -63,59 +49,33 @@ public class StudentService : IStudentService
         var result = this.mapper.Map<StudentResultDto>(mappedStudent);
         Console.WriteLine(result.FirstName);
 
-        return new Response<StudentResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
-
+        return result;
     }
 
-    public async Task<Response<bool>> DeleteAsync(long id)
+    public async Task<bool> RemoveAsync(long id)
     {
         Student existStudent = await this.unitOfWork.StudentRepository.SelectById(id);
 
         if (existStudent is null)
-            return new Response<bool>
-            {
-                StatusCode = 403,
-                Message = $"This student is not found Id:{existStudent.Id}",
-                Data = false
-            };
+            return false;
         this.unitOfWork.StudentRepository.Delete(existStudent);
         this.unitOfWork.SaveAsync();
 
-        return new Response<bool>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = true
-        };
+        return true;
     }
 
-    public async Task<Response<StudentResultDto>> GetByIdAsync(long id)
+    public async Task<StudentResultDto> RetrieveByIdAsync(long id)
     {
         Student existStudent = await this.unitOfWork.StudentRepository.SelectById(id);
         if (existStudent is null)
-            return new Response<StudentResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This student is not found Id:{existStudent.Id}",
-                Data = null
-            };
+            return null;
 
         var result = this.mapper.Map<StudentResultDto>(existStudent);
 
-        return new Response<StudentResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
-    public async Task<Response<IEnumerable<StudentResultDto>>> GetAllAsync()
+    public async Task<IEnumerable<StudentResultDto>> RetrieveAllAsync()
     {
         var students = await this.unitOfWork.StudentRepository.SelectAll().ToListAsync();
 
@@ -126,11 +86,6 @@ public class StudentService : IStudentService
         }
 
         var result = this.mapper.Map<IEnumerable<StudentResultDto>>(students);
-        return new Response<IEnumerable<StudentResultDto>>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 }
