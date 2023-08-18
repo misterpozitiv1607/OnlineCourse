@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using OnlineCourse.Service.Helpers;
-using OnlineCourse.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.Repositories;
-using OnlineCourse.Service.Interfaces;
-using OnlineCourse.Service.Dtos.Courses;
 using OnlineCourse.Domain.Entities.Courses;
+using OnlineCourse.Service.Dtos.Courses;
+using OnlineCourse.Service.Interfaces;
+using OnlineCourse.Service.Mappers;
 
 namespace OnlineCourse.Service.Services;
 
@@ -21,40 +20,26 @@ public class CourseService : ICourseService
 
     }
 
-    public async Task<Response<CourseResultDto>> CreateAsync(CourseCreationDto dto)
+    public async Task<CourseResultDto> AddAsync(CourseCreationDto dto)
     {
         Course  course = mapper.Map<Course>(dto);
         var existCourse = unitOfWork.CourseRepository.SelectAll().FirstOrDefault(u => u.StartDate.Equals(dto.StartDate));
 
         if (existCourse is not null)
-            return new Response<CourseResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This course allready exist CourseStartDate:{existCourse.StartDate}"
-            };
+            return null;
 
         await this.unitOfWork.CourseRepository.CreateAsync(course);
         await this.unitOfWork.SaveAsync();
 
         var result = this.mapper.Map<CourseResultDto>(course);
-        return new Response<CourseResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
-    public async Task<Response<CourseResultDto>> UpdateAsync(CourseUpdateDto dto)
+    public async Task<CourseResultDto> ModifyAsync(CourseUpdateDto dto)
     {
         Course existCourse = await this.unitOfWork.CourseRepository.SelectById(dto.Id);
         if (existCourse is null)
-            return new Response<CourseResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This course is not found Id:{existCourse.Id}",
-                Data = null
-            };
+            return null;
 
         var mappedCourse = this.mapper.Map(dto, existCourse);
         this.unitOfWork.CourseRepository.Update(mappedCourse);
@@ -62,58 +47,33 @@ public class CourseService : ICourseService
 
         var result = this.mapper.Map<CourseResultDto>(mappedCourse);
 
-        return new Response<CourseResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
-    public async Task<Response<bool>> DeleteAsync(long id)
+    public async Task<bool> RemoveAsync(long id)
     {
         Course existCourse = await this.unitOfWork.CourseRepository.SelectById(id);
 
         if (existCourse is null)
-            return new Response<bool>
-            {
-                StatusCode = 403,
-                Message = $"This course is not found Id:{existCourse.Id}",
-                Data = false
-            };
+            return false;
         this.unitOfWork.CourseRepository.Delete(existCourse);
         this.unitOfWork.SaveAsync();
 
-        return new Response<bool>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = true
-        };
+        return true;
     }
 
-    public async Task<Response<CourseResultDto>> GetByIdAsync(long id)
+    public async Task<CourseResultDto> RetrieveByIdAsync(long id)
     {
         Course existCourse = await this.unitOfWork.CourseRepository.SelectById(id);
         if (existCourse is null)
-            return new Response<CourseResultDto>
-            {
-                StatusCode = 403,
-                Message = $"This course is not found Id:{existCourse.Id}",
-                Data = null
-            };
+            return null;
 
         var result = this.mapper.Map<CourseResultDto>(existCourse);
 
-        return new Response<CourseResultDto>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 
-    public async Task<Response<IEnumerable<CourseResultDto>>> GetAllAsync()
+    public async Task<IEnumerable<CourseResultDto>> RetrieveAllAsync()
     {
         var courses = await this.unitOfWork.CourseRepository.SelectAll().ToListAsync();
 
@@ -124,11 +84,6 @@ public class CourseService : ICourseService
         }
 
         var result = this.mapper.Map<IEnumerable<CourseResultDto>>(courses);
-        return new Response<IEnumerable<CourseResultDto>>
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = result
-        };
+        return result;
     }
 }
