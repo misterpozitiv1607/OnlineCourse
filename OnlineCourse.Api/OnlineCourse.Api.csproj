@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\OnlineCourse.Domain\OnlineCourse.Domain.csproj" />
+    <ProjectReference Include="..\OnlineCourse.Service\OnlineCourse.Service.csproj" />
   </ItemGroup>
 
 </Project>
