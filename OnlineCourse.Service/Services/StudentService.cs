@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using OnlineCourse.Service.Helpers;
 using OnlineCourse.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.Repositories;
