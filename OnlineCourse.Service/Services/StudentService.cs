@@ -26,6 +26,7 @@ public class StudentService : IStudentService
 
         var mappedStudent = _mapper.Map<Student>(dto);
         await _unitOfWork.StudentRepository.CreateAsync(mappedStudent);
+        mappedStudent.CreatedAt = DateTime.UtcNow;
         await _unitOfWork.SaveAsync();
 
         var result = _mapper.Map<StudentResultDto>(mappedStudent);
@@ -40,6 +41,7 @@ public class StudentService : IStudentService
 
         _mapper.Map(dto, existStudent);
         _unitOfWork.StudentRepository.Update(existStudent);
+        _mapper.Map(dto, existStudent).UpdatedAt = DateTime.UtcNow;
         await _unitOfWork.SaveAsync();
 
         var result = _mapper.Map<StudentResultDto>(existStudent);
