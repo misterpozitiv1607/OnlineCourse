@@ -1,90 +1,78 @@
 ﻿using AutoMapper;
-using OnlineCourse.Service.Mappers;
-using Microsoft.EntityFrameworkCore;
-using OnlineCourse.DAL.Repositories;
-using OnlineCourse.Service.Interfaces;
-using OnlineCourse.Service.Dtos.Students;
+using OnlineCourse.DAL.IRepositories;
 using OnlineCourse.Domain.Entities.Students;
+using OnlineCourse.Service.Dtos.Students;
+using OnlineCourse.Service.Exceptions;
+using OnlineCourse.Service.Interfaces;
 
 namespace OnlineCourse.Service.Services;
 
 public class StudentService : IStudentService
 {
-    private readonly Mapper mapper;
-    private readonly UnitOfWork unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public StudentService()
+    public StudentService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        this.unitOfWork = new UnitOfWork();
-        this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
-
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<StudentResultDto> AddAsync(StudentCreationDto dto)
     {
-        Student student = mapper.Map<Student>(dto);
-        var existStudent = unitOfWork.StudentRepository.SelectAll().FirstOrDefault(u => u.Phone.Equals(dto.Phone));
+        Student existStudent = await _unitOfWork.StudentRepository.SelectAsync(e => e.Email == dto.Email);
+        if (existStudent != null)
+            throw new AlreadyExistException("This Student is already exist with this Email");
 
-        if (existStudent is not null)
-            return null;
+        var mappedStudent = _mapper.Map<Student>(dto);
+        await _unitOfWork.StudentRepository.CreateAsync(mappedStudent);
+        mappedStudent.CreatedAt = DateTime.UtcNow.AddHours(0);
+        await _unitOfWork.SaveAsync();
 
-        await this.unitOfWork.StudentRepository.CreateAsync(student);
-        this.unitOfWork.SaveAsync();
-
-        var result = this.mapper.Map<StudentResultDto>(student);
+        var result = _mapper.Map<StudentResultDto>(mappedStudent);
         return result;
     }
 
     public async Task<StudentResultDto> ModifyAsync(StudentUpdateDto dto)
     {
-        Student existStudent = await this.unitOfWork.StudentRepository.SelectById(dto.Id);
-        if (existStudent is null)
-            return null;
+        Student existStudent = await _unitOfWork.StudentRepository.SelectAsync(e => e.Id == dto.Id);
+        if (existStudent == null)
+            throw new NotFoundException("This Student is not found with this id");
 
-        var mappedStudent = this.mapper.Map(dto, existStudent);
-        this.unitOfWork.StudentRepository.Update(mappedStudent);
-        this.unitOfWork.SaveAsync();
+        _mapper.Map(dto, existStudent);
+        _unitOfWork.StudentRepository.Update(existStudent);
+        _mapper.Map(dto, existStudent).UpdatedAt = DateTime.UtcNow;
+        await _unitOfWork.SaveAsync();
 
-        var result = this.mapper.Map<StudentResultDto>(mappedStudent);
-        Console.WriteLine(result.FirstName);
-
+        var result = _mapper.Map<StudentResultDto>(existStudent);
         return result;
     }
 
     public async Task<bool> RemoveAsync(long id)
     {
-        Student existStudent = await this.unitOfWork.StudentRepository.SelectById(id);
+        Student existStudent = await _unitOfWork.StudentRepository.SelectAsync(e => e.Id == id);
+        if (existStudent == null)
+            throw new NotFoundException("This Student is not found with this id");
 
-        if (existStudent is null)
-            return false;
-        this.unitOfWork.StudentRepository.Delete(existStudent);
-        this.unitOfWork.SaveAsync();
-
+        _unitOfWork.StudentRepository.Delete(existStudent);
+        await _unitOfWork.SaveAsync();
         return true;
     }
 
     public async Task<StudentResultDto> RetrieveByIdAsync(long id)
     {
-        Student existStudent = await this.unitOfWork.StudentRepository.SelectById(id);
-        if (existStudent is null)
-            return null;
+        Student existStudent = await _unitOfWork.StudentRepository.SelectAsync(e => e.Id == id);
+        if (existStudent == null)
+            throw new NotFoundException("This Student is not found with this id");
 
-        var result = this.mapper.Map<StudentResultDto>(existStudent);
-
+        var result = _mapper.Map<StudentResultDto>(existStudent);
         return result;
     }
 
     public async Task<IEnumerable<StudentResultDto>> RetrieveAllAsync()
     {
-        var students = await this.unitOfWork.StudentRepository.SelectAll().ToListAsync();
-
-
-        foreach (var item in students)
-        {
-            Student student = await this.unitOfWork.StudentRepository.SelectById(item.Id);
-        }
-
-        var result = this.mapper.Map<IEnumerable<StudentResultDto>>(students);
+        var query = await _unitOfWork.StudentRepository.SelectAll();
+        var result = _mapper.Map<IEnumerable<StudentResultDto>>(query);
         return result;
     }
 }

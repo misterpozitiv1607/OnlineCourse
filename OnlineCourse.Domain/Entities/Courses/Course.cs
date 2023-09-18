@@ -8,8 +8,8 @@ namespace OnlineCourse.Domain.Entities.Courses;
 public class Course:Auditable
 {
     public double Price { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
+    public string StartDate { get; set; }
+    public string EndDate { get; set; }
 
     public long StudentId { get; set; }
     public Student Student { get; set; }

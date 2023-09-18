@@ -1,88 +1,76 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using OnlineCourse.DAL.Repositories;
+using OnlineCourse.DAL.IRepositories;
 using OnlineCourse.Domain.Entities.CourseCategories;
 using OnlineCourse.Service.Dtos.CourseCategories;
+using OnlineCourse.Service.Exceptions;
 using OnlineCourse.Service.Interfaces;
-using OnlineCourse.Service.Mappers;
 
 namespace OnlineCourse.Service.Services;
 
 public class CourseCategoryService : ICourseCategoryService
 {
-    private readonly Mapper mapper;
-    private readonly UnitOfWork unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public CourseCategoryService()
+    public CourseCategoryService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        this.unitOfWork = new UnitOfWork();
-        this.mapper = new Mapper(new MapperConfiguration(c => c.AddProfile<MappingProfile>()));
-
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<CourseCategoryResultDto> AddAsync(CourseCategoryCreationDto dto)
     {
-        CourseCategory coursecategory = mapper.Map<CourseCategory>(dto);
-        var existCourseCategory = unitOfWork.CourseCategoryRepository.SelectAll().FirstOrDefault(u => u.Name.Equals(dto.Name));
+        CourseCategory existCourseCategory = await _unitOfWork.CourseCategoryRepository.SelectAsync(e => e.Name == dto.Name && e.CourseId == dto.CourseId && e.Description == dto.Description);
+        if (existCourseCategory != null)
+            throw new AlreadyExistException("This CourseCategory is already exist with this Email");
 
-        if (existCourseCategory is not null)
-            return null;
-        await this.unitOfWork.CourseCategoryRepository.CreateAsync(coursecategory);
-        await this.unitOfWork.SaveAsync();
+        var mappedCourseCategory = _mapper.Map<CourseCategory>(dto);
+        await _unitOfWork.CourseCategoryRepository.CreateAsync(mappedCourseCategory);
+        await _unitOfWork.SaveAsync();
 
-        var result = this.mapper.Map<CourseCategoryResultDto>(coursecategory);
+        var result = _mapper.Map<CourseCategoryResultDto>(mappedCourseCategory);
         return result;
     }
 
     public async Task<CourseCategoryResultDto> ModifyAsync(CourseCategoryUpdateDto dto)
     {
-        CourseCategory existCourseCategory = await this.unitOfWork.CourseCategoryRepository.SelectById(dto.Id);
-        if (existCourseCategory is null)
-            return null;
+        CourseCategory existCourseCategory = await _unitOfWork.CourseCategoryRepository.SelectAsync(e => e.Id == dto.Id);
+        if (existCourseCategory == null)
+            throw new NotFoundException("This CourseCategory is not found with this id");
 
-        var mappedCourseCategory = this.mapper.Map(dto, existCourseCategory);
-        this.unitOfWork.CourseCategoryRepository.Update(mappedCourseCategory);
-        this.unitOfWork.SaveAsync();
+        _mapper.Map(dto, existCourseCategory);
+        _unitOfWork.CourseCategoryRepository.Update(existCourseCategory);
+        await _unitOfWork.SaveAsync();
 
-        var result = this.mapper.Map<CourseCategoryResultDto>(mappedCourseCategory);
-
+        var result = _mapper.Map<CourseCategoryResultDto>(existCourseCategory);
         return result;
     }
 
     public async Task<bool> RemoveAsync(long id)
     {
-        CourseCategory existCourseCategory = await this.unitOfWork.CourseCategoryRepository.SelectById(id);
+        CourseCategory existCourseCategory = await _unitOfWork.CourseCategoryRepository.SelectAsync(e => e.Id == id);
+        if (existCourseCategory == null)
+            throw new NotFoundException("This CourseCategory is not found with this id");
 
-        if (existCourseCategory is null)
-            return false;
-        this.unitOfWork.CourseCategoryRepository.Delete(existCourseCategory);
-        this.unitOfWork.SaveAsync();
-
+        _unitOfWork.CourseCategoryRepository.Delete(existCourseCategory);
+        await _unitOfWork.SaveAsync();
         return true;
     }
 
     public async Task<CourseCategoryResultDto> RetrieveByIdAsync(long id)
     {
-        CourseCategory existCourseCategory = await this.unitOfWork.CourseCategoryRepository.SelectById(id);
-        if (existCourseCategory is null)
-            return null;
+        CourseCategory existCourseCategory = await _unitOfWork.CourseCategoryRepository.SelectAsync(e => e.Id == id);
+        if (existCourseCategory == null)
+            throw new NotFoundException("This CourseCategory is not found with this id");
 
-        var result = this.mapper.Map<CourseCategoryResultDto>(existCourseCategory);
-
+        var result = _mapper.Map<CourseCategoryResultDto>(existCourseCategory);
         return result;
     }
 
     public async Task<IEnumerable<CourseCategoryResultDto>> RetrieveAllAsync()
     {
-        var coursecategorys = await this.unitOfWork.CourseCategoryRepository.SelectAll().ToListAsync();
-
-
-        foreach (var item in coursecategorys)
-        {
-            CourseCategory coursecategory = await this.unitOfWork.CourseCategoryRepository.SelectById(item.Id);
-        }
-
-        var result = this.mapper.Map<IEnumerable<CourseCategoryResultDto>>(coursecategorys);
+        var query = await _unitOfWork.CourseCategoryRepository.SelectAll();
+        var result = _mapper.Map<IEnumerable<CourseCategoryResultDto>>(query);
         return result;
     }
 }
