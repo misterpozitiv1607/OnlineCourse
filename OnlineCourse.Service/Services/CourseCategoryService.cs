@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using OnlineCourse.DAL.IRepositories;
 using OnlineCourse.Domain.Entities.CourseCategories;
-using OnlineCourse.Domain.Entities.Teachers;
 using OnlineCourse.Service.Dtos.CourseCategories;
-using OnlineCourse.Service.Dtos.Teachers;
 using OnlineCourse.Service.Exceptions;
 using OnlineCourse.Service.Interfaces;
 

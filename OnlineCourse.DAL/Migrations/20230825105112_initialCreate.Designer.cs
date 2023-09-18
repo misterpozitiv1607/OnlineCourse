@@ -12,8 +12,8 @@ using OnlineCourse.DAL.Contexts;
 namespace OnlineCourse.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230818152054_InitialFirstCreate")]
-    partial class InitialFirstCreate
+    [Migration("20230825105112_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

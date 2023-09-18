@@ -26,7 +26,7 @@ public class StudentService : IStudentService
 
         var mappedStudent = _mapper.Map<Student>(dto);
         await _unitOfWork.StudentRepository.CreateAsync(mappedStudent);
-        mappedStudent.CreatedAt = DateTime.UtcNow;
+        mappedStudent.CreatedAt = DateTime.UtcNow.AddHours(0);
         await _unitOfWork.SaveAsync();
 
         var result = _mapper.Map<StudentResultDto>(mappedStudent);
