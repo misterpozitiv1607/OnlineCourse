@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using OnlineCourse.Domain.Entities.Students;
+using OnlineCourse.Service.Dtos.Students;
 using OnlineCourse.Service.Interfaces;
 
 namespace OnlineCourse.Web.Controllers
@@ -21,7 +23,7 @@ namespace OnlineCourse.Web.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create(CreationDto dto)
+		public async Task<IActionResult> Create(StudentCreationDto dto)
 		{
 			dto.DateOfBirth = dto.DateOfBirth.ToUniversalTime();
 			var createdUser = await this.userService.AddAsync(dto);
@@ -32,7 +34,7 @@ namespace OnlineCourse.Web.Controllers
 		public async Task<IActionResult> Edit(long id)
 		{
 			var user = await this.userService.RetrieveByIdAsync(id);
-			var mappedUser = this.mapper.Map<User>(user);
+			var mappedUser = this.mapper.Map<Student>(user);
 			return View(mappedUser);
 		}
 
