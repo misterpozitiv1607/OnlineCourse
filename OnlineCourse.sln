@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.Service", "Onl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.Api", "OnlineCourse.Api\OnlineCourse.Api.csproj", "{C7FCD657-2308-44C5-ADD4-A1A0F369CB2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineCourse.Web", "OnlineCourse.Web\OnlineCourse.Web.csproj", "{2F300535-2BA8-4554-B0D7-3B19DE6E0BA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.Web", "OnlineCourse.Web\OnlineCourse.Web.csproj", "{2F300535-2BA8-4554-B0D7-3B19DE6E0BA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
