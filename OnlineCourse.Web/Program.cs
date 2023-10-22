@@ -1,3 +1,6 @@
+using OnlineCourse.Web.Service.Interfaces;
+using OnlineCourse.Web.Service.Services;
+
 namespace OnlineCourse.Web
 {
     public class Program
@@ -9,7 +12,10 @@ namespace OnlineCourse.Web
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
-
+            builder.Services.AddHttpClient<IStudentService, StudentService>(client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:5248/");
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
