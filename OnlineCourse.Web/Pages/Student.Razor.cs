@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-
 namespace OnlineCourse.Web.Pages
 {
     public partial class Student
@@ -7,6 +6,6 @@ namespace OnlineCourse.Web.Pages
         [Parameter]
         public string Title { get; set; }
         [Parameter]
-        public DateOnly Date { get; set; }
+        public DateOnly? Date { get; set; }
     }
 }
