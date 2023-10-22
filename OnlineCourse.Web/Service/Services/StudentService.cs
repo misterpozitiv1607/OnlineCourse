@@ -1,6 +1,4 @@
 ﻿using OnlineCourse.Web.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using OnlineCourse.Web.Service.Interfaces;
 
 namespace OnlineCourse.Web.Service.Services;
@@ -12,12 +10,6 @@ public class StudentService : IStudentService
     {
         this.httpClient = httpClient;
     }
-
-    internal static Task<Student[]> RetrieveAsync()
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<Student> AddAsync(Student dto)
     {
         throw new NotImplementedException();

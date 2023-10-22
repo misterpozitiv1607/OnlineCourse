@@ -1,3 +1,4 @@
+using OnlineCourse.Web.Models;
 using OnlineCourse.Web.Service.Interfaces;
 using OnlineCourse.Web.Service.Services;
 
@@ -12,6 +13,7 @@ namespace OnlineCourse.Web
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+            builder.Services.AddSingleton<Student>();
             builder.Services.AddHttpClient<IStudentService, StudentService>(client =>
             {
                 client.BaseAddress = new Uri("http://localhost:5248/");
