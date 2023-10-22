@@ -5,7 +5,7 @@ namespace OnlineCourse.Web.Pages
     public partial class Student
     {
         [Parameter]
-        public string Title{ get; set; }
+        public string Title { get; set; }
         [Parameter]
         public DateOnly Date { get; set; }
     }
