@@ -1,12 +1,10 @@
-﻿using OnlineCourse.Domain.Commons;
+﻿namespace OnlineCourse.Web.Models;
 
-namespace OnlineCourse.Domain.Entities.Students;
-
-public class Student:Auditable
+public class Student
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public string DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; }
     public string Phone { get; set; }
     public string Email { get; set; }
 

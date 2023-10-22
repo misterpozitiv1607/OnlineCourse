@@ -1,11 +1,12 @@
 ﻿@page "/student"
+@inherits StudentBase
 <div class="alert alert-secondary mt-4">
     <span class="oi oi-pencil me-2" aria-hidden="true"></span>
     <strong>
-        @Title @("Salom mening yoshim")
+        @OnlineCourse.Web.Models.Student.FirstName @("Salom mening yoshim")
     </strong>
     <strong>
-        @Date @(DateTime.UtcNow.Year-new DateOnly(2002, 07, 16).Year)
+        @OnlineCourse.Web.Models.Student.DateOfBirth @(new DateTime(2002, 07, 16))
     </strong>
 </div>
 
