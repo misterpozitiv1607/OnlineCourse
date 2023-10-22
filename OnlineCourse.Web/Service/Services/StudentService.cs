@@ -6,6 +6,11 @@ namespace OnlineCourse.Web.Service.Services;
 public class StudentService : IStudentService
 {
     private readonly HttpClient httpClient;
+
+    public StudentService()
+    {
+    }
+
     public StudentService(HttpClient httpClient)
     {
         this.httpClient = httpClient;
