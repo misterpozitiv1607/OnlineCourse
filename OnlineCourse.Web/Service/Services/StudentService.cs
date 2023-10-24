@@ -5,16 +5,6 @@ namespace OnlineCourse.Web.Service.Services;
 
 public class StudentService : IStudentService
 {
-    private readonly HttpClient httpClient;
-
-    public StudentService()
-    {
-    }
-
-    public StudentService(HttpClient httpClient)
-    {
-        this.httpClient = httpClient;
-    }
     public Task<Student> AddAsync(Student dto)
     {
         throw new NotImplementedException();
@@ -32,7 +22,11 @@ public class StudentService : IStudentService
 
     public async Task<IEnumerable<Student>> RetrieveAllAsync()
     {
-       return await this.httpClient.GetFromJsonAsync<Student[]>("api/Student/GetAll");
+        var httpClient = new HttpClient();
+        string url = "http://localhost:5248/api/Student/GetAll";
+        var content = await httpClient.GetAsync(url);
+        var result =  content.Content.ReadAsStringAsync();
+        return (IEnumerable<Student>)result;
     }
     
     public Task<Student> RetrieveByIdAsync(long id)
