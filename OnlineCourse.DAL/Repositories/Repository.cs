@@ -1,8 +1,8 @@
-﻿using OnlineCourse.DAL.Contexts;
+﻿using System.Linq.Expressions;
+using OnlineCourse.DAL.Contexts;
 using OnlineCourse.Domain.Commons;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.DAL.IRepositories;
-using System.Linq.Expressions;
 
 namespace OnlineCourse.DAL.Repositories;
 
