@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.Api", "OnlineC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.Web", "OnlineCourse.Web\OnlineCourse.Web.csproj", "{2F300535-2BA8-4554-B0D7-3B19DE6E0BA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineCourse.Desktop", "OnlineCourse.Desktop\OnlineCourse.Desktop.csproj", "{ADE4C78B-B81E-4281-BB6A-698C89BFB0D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2F300535-2BA8-4554-B0D7-3B19DE6E0BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F300535-2BA8-4554-B0D7-3B19DE6E0BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F300535-2BA8-4554-B0D7-3B19DE6E0BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADE4C78B-B81E-4281-BB6A-698C89BFB0D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADE4C78B-B81E-4281-BB6A-698C89BFB0D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADE4C78B-B81E-4281-BB6A-698C89BFB0D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADE4C78B-B81E-4281-BB6A-698C89BFB0D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
