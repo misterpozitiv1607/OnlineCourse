@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OnlineCourse.Domain.Entities.CourseCategories;
-using OnlineCourse.Domain.Entities.Courses;
 using OnlineCourse.Domain.Entities.Orders;
+using OnlineCourse.Domain.Entities.Courses;
 using OnlineCourse.Domain.Entities.Students;
 using OnlineCourse.Domain.Entities.Teachers;
+using OnlineCourse.Domain.Entities.CourseCategories;
 
 namespace OnlineCourse.DAL.Contexts;
 
