@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.Desktop", "Onl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.WebMVC", "OnlineCourse.WebMVC\OnlineCourse.WebMVC.csproj", "{3B7BD810-FFE0-4A77-9D01-C337C39D2D24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineCourse.WebApp", "OnlineCourse.WebApp\OnlineCourse.WebApp.csproj", "{58DCD504-F040-4002-BE72-D735297F3F48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCourse.WebApp", "OnlineCourse.WebApp\OnlineCourse.WebApp.csproj", "{58DCD504-F040-4002-BE72-D735297F3F48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
